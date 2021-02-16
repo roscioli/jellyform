@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { InputSelect } from './InputSelect'
 import { stubObject } from './utils'
