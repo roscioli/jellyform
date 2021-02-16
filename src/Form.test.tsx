@@ -35,40 +35,37 @@ const getFormInitialState = (override?: Partial<FakeForm>): FakeForm => ({
   ...override
 })
 
-const renderWithProps = (props: Partial<FormProps<{}, FakeForm>>) => {
-  return render(
-    <Form<{}, FakeForm>
-      onFormSuccess={jest.fn()}
-      submitForm={jest.fn()}
-      propGeneratorOptions={{}}
-      formValues={getFormInitialState()}
-      setForm={jest.fn()}
-      fieldConfigs={{
-        num1: {
-          Component: InputText,
-          generateProps: () => ({ required: true }),
-          getError: (f) => ((f?.num1 || Infinity) > 100 ? 'Exceeds max' : null)
-        },
-        str1: {
-          Component: InputText,
-          generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
-        },
-        num2: { Component: InputText },
-        str2: {
-          Component: InputText,
-          generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
-        },
-        sel1: { Component: InputSelect },
-        nums: {
-          Component: MultiSelect,
-          generateProps: () => ({ required: true })
-        }
-      }}
-      layout={[['num1', 'str1'], ['num2', 'str2'], ['sel1']]}
-      {...props}
-    />
-  )
-}
+const getFormProps = (): FormProps<FakeForm> => ({
+  submitForm: jest.fn(),
+  propGeneratorOptions: {},
+  formValues: getFormInitialState(),
+  setForm: jest.fn(),
+  fieldConfigs: {
+    num1: {
+      Component: InputText,
+      generateProps: () => ({ required: true }),
+      getError: (f) => ((f?.num1 || Infinity) > 100 ? 'Exceeds max' : null)
+    },
+    str1: {
+      Component: InputText,
+      generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
+    },
+    num2: { Component: InputText },
+    str2: {
+      Component: InputText,
+      generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
+    },
+    sel1: { Component: InputSelect },
+    nums: {
+      Component: MultiSelect,
+      generateProps: () => ({ required: true })
+    }
+  },
+  layout: [['num1', 'str1'], ['num2', 'str2'], ['sel1']]
+})
+
+const renderWithProps = (props: Partial<FormProps<FakeForm>>) =>
+  render(<Form<FakeForm> {...getFormProps()} {...props} />)
 
 it('enables submission', () => {
   const { getByTestId } = renderWithProps({})

@@ -5,17 +5,12 @@ import { stubObject } from './utils'
 
 type StringKeyObject = { [key: string]: any }
 
-export type OnTokenCreation = (token: string) => void
-
-export type SubmitButtonProps<T> = { form: T; disabled: boolean }
-
 type GeneratedProps = {
-  [key: string]: any
   required?: boolean
   disabled?: boolean
-}
+} & StringKeyObject
 
-export type FieldConfig<PropGeneratorOptions, FormValues> = {
+type FieldConfig<FormValues, PropGeneratorOptions> = {
   Component: React.FC<any>
   generateProps?: (
     options: PropGeneratorOptions & {
@@ -26,24 +21,23 @@ export type FieldConfig<PropGeneratorOptions, FormValues> = {
   getError?: (form: FormValues) => string | null
 }
 
-export type FieldConfigs<PropGeneratorOptions, FormValues> = {
-  [lkey: string]: FieldConfig<PropGeneratorOptions, FormValues>
+type FieldConfigs<FormValues, PropGeneratorOptions> = {
+  [lkey: string]: FieldConfig<FormValues, PropGeneratorOptions>
 }
 
-export type FormProps<PropGeneratorOptions, FormValues> = {
+export type FormProps<FormValues, PropGeneratorOptions extends object = {}> = {
   propGeneratorOptions: PropGeneratorOptions
   formValues: FormValues
   setForm: (state: FormValues) => void
-  fieldConfigs: FieldConfigs<PropGeneratorOptions, FormValues>
+  fieldConfigs: FieldConfigs<FormValues, PropGeneratorOptions>
   layout: (keyof FormValues)[][]
-  onFormSuccess: OnTokenCreation
   submitForm: (submission: Partial<FormValues>) => Promise<any>
   submitButtonText?: string
 }
 
 export default function Form<
-  PropGeneratorOptions extends object,
-  FormValues extends StringKeyObject
+  FormValues extends StringKeyObject,
+  PropGeneratorOptions extends object = {}
 >({
   propGeneratorOptions: _propGenOpts,
   formValues,
@@ -52,7 +46,7 @@ export default function Form<
   layout,
   submitForm,
   submitButtonText
-}: FormProps<PropGeneratorOptions, FormValues>) {
+}: FormProps<FormValues, PropGeneratorOptions>) {
   const setFormFields = useCallback(
     (fields: Partial<Record<keyof FormValues, any>>) => {
       setForm({ ...formValues, ...fields })
