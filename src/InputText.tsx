@@ -26,7 +26,7 @@ export const InputText = (props: InputTextProps) => {
   } = props
   return (
     <div className={`form-field ${getDisabledClass(disabled)}`}>
-      <label>{getLabelText(label, required)}</label>
+      <label htmlFor={name}>{getLabelText(label, required)}</label>
       <input
         data-testid={`input-${name}`}
         id={name}

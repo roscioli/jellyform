@@ -6,6 +6,7 @@ import { stubObject } from './utils'
 type StringKeyObject = { [key: string]: any }
 
 type StaticProps = {
+  label?: string | number | symbol
   required?: boolean
   disabled?: boolean
 }
@@ -24,9 +25,10 @@ type FieldConfig<FormValues, PropGeneratorOptions> = {
   getError?: (form: FormValues) => string | null
 }
 
-type FieldConfigs<FormValues, PropGeneratorOptions> = {
-  [lkey: string]: FieldConfig<FormValues, PropGeneratorOptions>
-}
+export type FieldConfigs<
+  FormValues,
+  PropGeneratorOptions extends object = {}
+> = Record<keyof FormValues, FieldConfig<FormValues, PropGeneratorOptions>>
 
 export type FormProps<FormValues, PropGeneratorOptions extends object = {}> = {
   propGeneratorOptions: PropGeneratorOptions
@@ -109,9 +111,11 @@ export default function Form<
     const els = layout.map((row, i) => (
       <div key={`row-${i}`} className='form-row'>
         {row.map((key: keyof FormValues) => {
-          const { Component, generateProps = stubObject } = fieldConfigs[
-            key as string
-          ]
+          const {
+            Component,
+            generateProps = stubObject,
+            staticProps
+          } = fieldConfigs[key as string]
 
           const props: GeneratedProps = {
             'data-testid': `input-${key}`,
@@ -125,6 +129,7 @@ export default function Form<
               >)
             },
             error: errors[key],
+            ...staticProps,
             ...generateProps(propGeneratorOptions)
           }
 

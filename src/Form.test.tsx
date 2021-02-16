@@ -1,7 +1,7 @@
 import { fireEvent, render, wait } from '@testing-library/react'
 import React from 'react'
 import { InputText } from './InputText'
-import Form, { FormProps } from './Form'
+import Form, { FieldConfigs, FormProps } from './Form'
 import { InputSelectOption } from './utils'
 import { InputSelect, MultiSelect } from './InputSelect'
 
@@ -35,36 +35,38 @@ const getFormInitialState = (override?: Partial<FakeForm>): FakeForm => ({
   ...override
 })
 
-function getFormProps(): FormProps<FakeForm> {
-  return {
-    submitForm: jest.fn(),
-    propGeneratorOptions: {},
-    formValues: getFormInitialState(),
-    setForm: jest.fn(),
-    fieldConfigs: {
-      num1: {
-        Component: InputText,
-        generateProps: () => ({ required: true }),
-        getError: (f) => ((f?.num1 || Infinity) > 100 ? 'Exceeds max' : null)
-      },
-      str1: {
-        Component: InputText,
-        generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
-      },
-      num2: { Component: InputText },
-      str2: {
-        Component: InputText,
-        generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
-      },
-      sel1: { Component: InputSelect },
-      nums: {
-        Component: MultiSelect,
-        generateProps: () => ({ required: true })
-      }
+const getBaseFormProps = () => ({
+  submitForm: jest.fn(),
+  propGeneratorOptions: {},
+  setForm: jest.fn()
+})
+
+const getFormProps = (): FormProps<FakeForm> => ({
+  ...getBaseFormProps(),
+  formValues: getFormInitialState(),
+  fieldConfigs: {
+    num1: {
+      Component: InputText,
+      generateProps: () => ({ required: true }),
+      getError: (f) => ((f?.num1 || Infinity) > 100 ? 'Exceeds max' : null)
     },
-    layout: [['num1', 'str1'], ['num2', 'str2'], ['sel1']]
-  }
-}
+    str1: {
+      Component: InputText,
+      generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
+    },
+    num2: { Component: InputText },
+    str2: {
+      Component: InputText,
+      generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
+    },
+    sel1: { Component: InputSelect },
+    nums: {
+      Component: MultiSelect,
+      generateProps: () => ({ required: true })
+    }
+  },
+  layout: [['num1', 'str1'], ['num2', 'str2'], ['sel1']]
+})
 
 const renderWithProps = (props: Partial<FormProps<FakeForm>>) =>
   render(<Form<FakeForm> {...getFormProps()} {...props} />)
@@ -206,4 +208,21 @@ describe('rendering', () => {
     expect(labelEls[2].length).toEqual(1)
     expect(labelEls[2]).toEqual([expect.stringContaining('sel1')])
   })
+})
+
+it('plugs in static props', () => {
+  type FakeForm2 = { input1: string }
+  const fieldConfigs: FieldConfigs<FakeForm2> = {
+    input1: { Component: InputText, staticProps: { label: 'new input 1' } }
+  }
+
+  const { getByLabelText } = render(
+    <Form<FakeForm2>
+      {...getBaseFormProps()}
+      formValues={{ input1: 'one' }}
+      fieldConfigs={fieldConfigs}
+      layout={[['input1']]}
+    />
+  )
+  expect(getByLabelText('new input 1')).toBeTruthy()
 })
