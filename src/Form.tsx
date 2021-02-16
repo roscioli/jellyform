@@ -81,8 +81,7 @@ export default function Form<
       fieldConfigs[key].Component === InputSelect
         ? formValues[key]?.value
         : formValues[key],
-    // eslint-disable-next-line prettier/prettier
-    [fieldConfigs, formValues],
+    [fieldConfigs, formValues]
   )
 
   useEffect(() => {
