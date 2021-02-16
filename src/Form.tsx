@@ -110,7 +110,7 @@ export default function Form<
           [key]: value && getError ? getError(formValues) : null
         })
         return acc
-      }, {} as Partial<Record<keyof FormValues, string>>)
+      }, {} as PartialRecordOfFormValues<FormValues, string>)
     )
   }, [fieldConfigs, getValue, formValues])
 
@@ -132,9 +132,9 @@ export default function Form<
             label: key,
             form: formValues,
             onChange: (val: FormValues[keyof FormValues]) => {
-              setFormFields({ [key]: val } as Partial<
-                Record<keyof FormValues, FormValues[keyof FormValues]>
-              >)
+              setFormFields({
+                [key]: val
+              } as PartialRecordOfFormValues<FormValues>)
             },
             error: errors[key],
             ...staticProps,
