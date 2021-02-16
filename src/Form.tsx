@@ -19,7 +19,9 @@ type FieldConfig<FormValues, PropGeneratorOptions> = {
   generateProps?: (
     options: PropGeneratorOptions & {
       formValues: FormValues
-      setFormFields: (fields: Partial<Record<keyof FormValues, any>>) => void
+      setFormFields: (
+        fields: Partial<Record<keyof FormValues, FormValues[keyof FormValues]>>
+      ) => void
     }
   ) => GeneratedProps
   getError?: (form: FormValues) => string | null
