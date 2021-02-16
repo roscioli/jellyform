@@ -1,5 +1,5 @@
 import { fireEvent, render, wait } from '@testing-library/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { InputText } from './InputText'
 import Form, { FieldConfigs, FormProps } from './Form'
 import { InputSelectOption } from './utils'
@@ -37,13 +37,13 @@ const getFormInitialState = (override?: Partial<FakeForm>): FakeForm => ({
 
 const getBaseFormProps = () => ({
   submitForm: jest.fn(),
-  propGeneratorOptions: {},
   setForm: jest.fn()
 })
 
 const getFormProps = (): FormProps<FakeForm> => ({
   ...getBaseFormProps(),
   formValues: getFormInitialState(),
+  propGeneratorOptions: {},
   fieldConfigs: {
     num1: {
       Component: InputText,
@@ -220,6 +220,7 @@ describe('input component props', () => {
     const { getByLabelText } = render(
       <Form<FakeForm2>
         {...getBaseFormProps()}
+        propGeneratorOptions={{}}
         formValues={{ input1: 'one' }}
         fieldConfigs={fieldConfigs}
         layout={[['input1']]}
@@ -240,11 +241,45 @@ describe('input component props', () => {
     const { getByLabelText } = render(
       <Form<FakeForm2>
         {...getBaseFormProps()}
+        propGeneratorOptions={{}}
         formValues={{ input1: 'one' }}
         fieldConfigs={fieldConfigs}
         layout={[['input1']]}
       />
     )
     expect(getByLabelText('new input 1')).toBeTruthy()
+  })
+
+  it('updates when generated props update', async () => {
+    type FakeForm2 = { input1: string }
+    type PropGeneratorOptions = { label: string }
+    const fieldConfigs: FieldConfigs<FakeForm2, PropGeneratorOptions> = {
+      input1: {
+        Component: InputText,
+        generateProps: ({ label }) => ({ label })
+      }
+    }
+
+    const ContainerComponent = () => {
+      const [label, setLabel] = useState('original label')
+
+      useEffect(() => {
+        setTimeout(() => setLabel('new label'), 1)
+      }, [])
+
+      return (
+        <Form<FakeForm2, PropGeneratorOptions>
+          {...getBaseFormProps()}
+          propGeneratorOptions={{ label }}
+          formValues={{ input1: 'one' }}
+          fieldConfigs={fieldConfigs}
+          layout={[['input1']]}
+        />
+      )
+    }
+
+    const { getByLabelText } = render(<ContainerComponent />)
+    expect(getByLabelText('original label')).toBeTruthy()
+    await wait(() => expect(getByLabelText('new label')).toBeTruthy())
   })
 })
