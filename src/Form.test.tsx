@@ -26,12 +26,13 @@ type FakeForm = {
   nums?: number[]
 }
 
-const getFormInitialState = (): FakeForm => ({
+const getFormInitialState = (override?: Partial<FakeForm>): FakeForm => ({
   num1: 1,
   str1: '1',
   num2: 2,
   str2: '2',
-  nums: [1]
+  nums: [1],
+  ...override
 })
 
 const renderWithProps = (props: Partial<FormProps<{}, FakeForm>>) => {
@@ -50,12 +51,12 @@ const renderWithProps = (props: Partial<FormProps<{}, FakeForm>>) => {
         },
         str1: {
           Component: InputText,
-          generateProps: ({ formValues: f }) => ({ required: f.num1 })
+          generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
         },
         num2: { Component: InputText },
         str2: {
           Component: InputText,
-          generateProps: ({ formValues: f }) => ({ disabled: f.num1 })
+          generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
         },
         sel1: { Component: InputSelect },
         nums: {
@@ -171,4 +172,33 @@ it('reenables button on submit complete', async () => {
       false
     )
   })
+})
+
+it('disables input if disabled results in true', () => {
+  const submitForm = jest.fn(() => Promise.resolve())
+  const { getByTestId } = renderWithProps({
+    submitForm,
+    formValues: getFormInitialState({ num2: 0 })
+  })
+  const el = getByTestId('input-str2') as HTMLInputElement
+  expect(el.disabled).toEqual(true)
+})
+
+it('submits form omitting disabled inputs', () => {
+  const submitForm = jest.fn(() => Promise.resolve())
+  const initialFormValues: FakeForm = {
+    num1: 1,
+    str1: '1',
+    num2: undefined,
+    str2: '2',
+    nums: [1]
+  }
+  expect(initialFormValues.str2).toEqual('2')
+  const { getByTestId } = renderWithProps({
+    submitForm,
+    formValues: initialFormValues
+  })
+  fireEvent.click(getByTestId('submitButton'))
+  const { str2, ...submission } = initialFormValues
+  expect(submitForm).toHaveBeenCalledWith(submission)
 })

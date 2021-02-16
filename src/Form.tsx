@@ -9,29 +9,35 @@ export type OnTokenCreation = (token: string) => void
 
 export type SubmitButtonProps<T> = { form: T; disabled: boolean }
 
-export type FieldConfig<Opts, Form> = {
+type GeneratedProps = {
+  [key: string]: any
+  required?: boolean
+  disabled?: boolean
+}
+
+export type FieldConfig<PropGeneratorOptions, FormValues> = {
   Component: React.FC<any>
   generateProps?: (
-    options: Opts & {
-      formValues: Form
-      setFormFields: (fields: Partial<Record<keyof Form, any>>) => void
+    options: PropGeneratorOptions & {
+      formValues: FormValues
+      setFormFields: (fields: Partial<Record<keyof FormValues, any>>) => void
     }
-  ) => Record<string, any>
-  getError?: (form: Form) => string | null
+  ) => GeneratedProps
+  getError?: (form: FormValues) => string | null
 }
 
-export type FieldConfigs<Opts, Form> = {
-  [lkey: string]: FieldConfig<Opts, Form>
+export type FieldConfigs<PropGeneratorOptions, FormValues> = {
+  [lkey: string]: FieldConfig<PropGeneratorOptions, FormValues>
 }
 
-export type FormProps<PropGeneratorOptions, F> = {
+export type FormProps<PropGeneratorOptions, FormValues> = {
   propGeneratorOptions: PropGeneratorOptions
-  formValues: F
-  setForm: (state: F) => void
-  fieldConfigs: FieldConfigs<PropGeneratorOptions, F>
-  layout: (keyof F)[][]
+  formValues: FormValues
+  setForm: (state: FormValues) => void
+  fieldConfigs: FieldConfigs<PropGeneratorOptions, FormValues>
+  layout: (keyof FormValues)[][]
   onFormSuccess: OnTokenCreation
-  submitForm: (submission: F) => Promise<any>
+  submitForm: (submission: Partial<FormValues>) => Promise<any>
   submitButtonText?: string
 }
 
@@ -59,6 +65,10 @@ export default function Form<
   >({})
   const [isFormComplete, setIsFormComplete] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formEls, setFormEls] = useState<JSX.Element[]>()
+  const [disabledKeys, setDisabledKeys] = useState<Set<keyof FormValues>>(
+    new Set()
+  )
 
   const disabled = useMemo(
     () =>
@@ -98,36 +108,40 @@ export default function Form<
     )
   }, [fieldConfigs, getValue, formValues])
 
-  const formEls = useMemo(
-    () =>
-      layout.map((row, i) => (
-        <div key={`row-${i}`} className='form-row'>
-          {row.map((key: keyof FormValues) => {
-            const { Component, generateProps = stubObject } = fieldConfigs[
-              key as string
-            ]
+  useEffect(() => {
+    const _disabledKeys: Set<keyof FormValues> = new Set()
+    const els = layout.map((row, i) => (
+      <div key={`row-${i}`} className='form-row'>
+        {row.map((key: keyof FormValues) => {
+          const { Component, generateProps = stubObject } = fieldConfigs[
+            key as string
+          ]
 
-            return (
-              <Component
-                key={key}
-                name={key}
-                value={formValues[key]}
-                label={key}
-                form={formValues}
-                onChange={(val: string) => {
-                  setFormFields({ [key]: val } as Partial<
-                    Record<keyof FormValues, any>
-                  >)
-                }}
-                error={errors[key]}
-                {...generateProps(propGeneratorOptions)}
-              />
-            )
-          })}
-        </div>
-      )),
-    [layout, errors, setFormFields]
-  )
+          const props: GeneratedProps = {
+            'data-testid': `input-${key}`,
+            name: key,
+            value: formValues[key],
+            label: key,
+            form: formValues,
+            onChange: (val: any) => {
+              setFormFields({ [key]: val } as Partial<
+                Record<keyof FormValues, any>
+              >)
+            },
+            error: errors[key],
+            ...generateProps(propGeneratorOptions)
+          }
+
+          if ('disabled' in props && props.disabled) _disabledKeys.add(key)
+
+          return <Component key={key} {...props} />
+        })}
+      </div>
+    ))
+
+    setFormEls(els)
+    setDisabledKeys(_disabledKeys)
+  }, [layout, errors, setFormFields])
 
   return (
     <div>
@@ -137,7 +151,13 @@ export default function Form<
         disabled={disabled}
         onClick={async () => {
           setIsSubmitting(true)
-          await submitForm(formValues)
+          const formWithoutDisabledKeys = Object.entries(formValues).reduce(
+            (acc, [k, v]) => {
+              return disabledKeys.has(k) ? acc : { ...acc, [k]: v }
+            },
+            {}
+          )
+          await submitForm(formWithoutDisabledKeys)
           setIsSubmitting(false)
         }}
       >
