@@ -154,16 +154,14 @@ export default function Form<
 
   return (
     <div>
-      <div style={{ margin: '2.5rem 0' }}>{formEls}</div>
+      <div>{formEls}</div>
       <button
         data-testid='submitButton'
         disabled={disabled}
         onClick={async () => {
           setIsSubmitting(true)
           const formWithoutDisabledKeys = Object.entries(formValues).reduce(
-            (acc, [k, v]) => {
-              return disabledKeys.has(k) ? acc : { ...acc, [k]: v }
-            },
+            (acc, [k, v]) => (disabledKeys.has(k) ? acc : { ...acc, [k]: v }),
             {}
           )
           await submitForm(formWithoutDisabledKeys)
