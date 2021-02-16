@@ -38,7 +38,7 @@ export type FormProps<
   FormValues extends StringKeyObject,
   PropGeneratorOptions extends object = {}
 > = {
-  propGeneratorOptions: PropGeneratorOptions
+  propGeneratorOptions?: PropGeneratorOptions
   formValues: FormValues
   setForm: (state: FormValues) => void
   fieldConfigs: FieldConfigs<FormValues, PropGeneratorOptions>
@@ -51,7 +51,7 @@ export default function Form<
   FormValues extends StringKeyObject,
   PropGeneratorOptions extends object = {}
 >({
-  propGeneratorOptions: _propGenOpts,
+  propGeneratorOptions: _propGenOpts = {} as PropGeneratorOptions,
   formValues,
   setForm,
   fieldConfigs,

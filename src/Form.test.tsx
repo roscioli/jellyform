@@ -43,7 +43,6 @@ const getBaseFormProps = () => ({
 const getFormProps = (): FormProps<FakeForm> => ({
   ...getBaseFormProps(),
   formValues: getFormInitialState(),
-  propGeneratorOptions: {},
   fieldConfigs: {
     num1: {
       Component: InputText,
