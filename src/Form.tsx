@@ -5,13 +5,16 @@ import { stubObject } from './utils'
 
 type StringKeyObject = { [key: string]: any }
 
-type GeneratedProps = {
+type StaticProps = {
   required?: boolean
   disabled?: boolean
-} & StringKeyObject
+}
+
+type GeneratedProps = StaticProps & StringKeyObject
 
 type FieldConfig<FormValues, PropGeneratorOptions> = {
   Component: React.FC<any>
+  staticProps?: StaticProps
   generateProps?: (
     options: PropGeneratorOptions & {
       formValues: FormValues
