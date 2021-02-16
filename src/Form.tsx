@@ -55,7 +55,9 @@ export default function Form<
   submitButtonText
 }: FormProps<FormValues, PropGeneratorOptions>) {
   const setFormFields = useCallback(
-    (fields: Partial<Record<keyof FormValues, any>>) => {
+    (
+      fields: Partial<Record<keyof FormValues, FormValues[keyof FormValues]>>
+    ) => {
       setForm({ ...formValues, ...fields })
     },
     [formValues, setForm]
