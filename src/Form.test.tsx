@@ -23,7 +23,7 @@ type FakeForm = {
   num2?: number
   str2?: string
   sel1?: InputSelectOption<number, string>
-  nums?: number[]
+  catchall?: number[] | null
 }
 
 const getFormInitialState = (override?: Partial<FakeForm>): FakeForm => ({
@@ -31,7 +31,7 @@ const getFormInitialState = (override?: Partial<FakeForm>): FakeForm => ({
   str1: '1',
   num2: 2,
   str2: '2',
-  nums: [1],
+  catchall: [1],
   ...override
 })
 
@@ -59,7 +59,7 @@ const getFormProps = (): FormProps<FakeForm> => ({
       generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
     },
     sel1: { Component: InputSelect },
-    nums: {
+    catchall: {
       Component: MultiSelect,
       generateProps: () => ({ required: true })
     }
@@ -89,7 +89,25 @@ describe('submit button', () => {
 
   it('disables submission when form has an empty array value', () => {
     const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), nums: [] }
+      formValues: { ...getFormInitialState(), catchall: [] }
+    })
+    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
+      true
+    )
+  })
+
+  it('enables submission when form has a 0 value', () => {
+    const { getByTestId } = renderWithProps({
+      formValues: { ...getFormInitialState(), num1: 0 }
+    })
+    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
+      false
+    )
+  })
+
+  it('disables submission when form has a null value', () => {
+    const { getByTestId } = renderWithProps({
+      formValues: { ...getFormInitialState(), catchall: null }
     })
     expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
       true
@@ -151,7 +169,7 @@ describe('submission', () => {
       str1: '1',
       num2: undefined,
       str2: '2',
-      nums: [1]
+      catchall: [1]
     }
     expect(initialFormValues.str2).toEqual('2')
     const { getByTestId } = renderWithProps({

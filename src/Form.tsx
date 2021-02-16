@@ -96,7 +96,9 @@ export default function Form<
         if (!config.generateProps) return true
         if (!config.generateProps(propGeneratorOptions).required) return true
         const val = getValue(key)
-        return Boolean(Array.isArray(val) ? val.length : val)
+
+        if (Array.isArray(val)) return val.length
+        return val !== undefined && val !== null
       })
     )
   }, [formValues, propGeneratorOptions, fieldConfigs, getValue])
