@@ -210,19 +210,41 @@ describe('rendering', () => {
   })
 })
 
-it('plugs in static props', () => {
-  type FakeForm2 = { input1: string }
-  const fieldConfigs: FieldConfigs<FakeForm2> = {
-    input1: { Component: InputText, staticProps: { label: 'new input 1' } }
-  }
+describe('input component props', () => {
+  it('plugs in static props', () => {
+    type FakeForm2 = { input1: string }
+    const fieldConfigs: FieldConfigs<FakeForm2> = {
+      input1: { Component: InputText, staticProps: { label: 'new input 1' } }
+    }
 
-  const { getByLabelText } = render(
-    <Form<FakeForm2>
-      {...getBaseFormProps()}
-      formValues={{ input1: 'one' }}
-      fieldConfigs={fieldConfigs}
-      layout={[['input1']]}
-    />
-  )
-  expect(getByLabelText('new input 1')).toBeTruthy()
+    const { getByLabelText } = render(
+      <Form<FakeForm2>
+        {...getBaseFormProps()}
+        formValues={{ input1: 'one' }}
+        fieldConfigs={fieldConfigs}
+        layout={[['input1']]}
+      />
+    )
+    expect(getByLabelText('new input 1')).toBeTruthy()
+  })
+
+  it('plugs in generated props', () => {
+    type FakeForm2 = { input1: string }
+    const fieldConfigs: FieldConfigs<FakeForm2> = {
+      input1: {
+        Component: InputText,
+        generateProps: () => ({ label: 'new input 1' })
+      }
+    }
+
+    const { getByLabelText } = render(
+      <Form<FakeForm2>
+        {...getBaseFormProps()}
+        formValues={{ input1: 'one' }}
+        fieldConfigs={fieldConfigs}
+        layout={[['input1']]}
+      />
+    )
+    expect(getByLabelText('new input 1')).toBeTruthy()
+  })
 })
