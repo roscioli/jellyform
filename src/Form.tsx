@@ -123,9 +123,9 @@ export default function Form<
             value: formValues[key],
             label: key,
             form: formValues,
-            onChange: (val: any) => {
+            onChange: (val: FormValues[keyof FormValues]) => {
               setFormFields({ [key]: val } as Partial<
-                Record<keyof FormValues, any>
+                Record<keyof FormValues, FormValues[keyof FormValues]>
               >)
             },
             error: errors[key],
