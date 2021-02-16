@@ -13,26 +13,32 @@ type StaticProps = {
 
 type GeneratedProps = StaticProps & StringKeyObject
 
+type PartialRecordOfFormValues<
+  T extends StringKeyObject,
+  V = T[keyof T]
+> = Partial<Record<keyof T, V>>
+
 type FieldConfig<FormValues, PropGeneratorOptions> = {
   Component: React.FC<any>
   staticProps?: StaticProps
   generateProps?: (
     options: PropGeneratorOptions & {
       formValues: FormValues
-      setFormFields: (
-        fields: Partial<Record<keyof FormValues, FormValues[keyof FormValues]>>
-      ) => void
+      setFormFields: (fields: PartialRecordOfFormValues<FormValues>) => void
     }
   ) => GeneratedProps
   getError?: (form: FormValues) => string | null
 }
 
 export type FieldConfigs<
-  FormValues,
+  FormValues extends StringKeyObject,
   PropGeneratorOptions extends object = {}
 > = Record<keyof FormValues, FieldConfig<FormValues, PropGeneratorOptions>>
 
-export type FormProps<FormValues, PropGeneratorOptions extends object = {}> = {
+export type FormProps<
+  FormValues extends StringKeyObject,
+  PropGeneratorOptions extends object = {}
+> = {
   propGeneratorOptions: PropGeneratorOptions
   formValues: FormValues
   setForm: (state: FormValues) => void
@@ -55,16 +61,14 @@ export default function Form<
   submitButtonText
 }: FormProps<FormValues, PropGeneratorOptions>) {
   const setFormFields = useCallback(
-    (
-      fields: Partial<Record<keyof FormValues, FormValues[keyof FormValues]>>
-    ) => {
+    (fields: PartialRecordOfFormValues<FormValues>) => {
       setForm({ ...formValues, ...fields })
     },
     [formValues, setForm]
   )
   const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
   const [errors, setErrors] = useState<
-    Partial<Record<keyof FormValues, string>>
+    PartialRecordOfFormValues<FormValues, string>
   >({})
   const [isFormComplete, setIsFormComplete] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
