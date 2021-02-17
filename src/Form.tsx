@@ -151,7 +151,7 @@ export default function Form<
 
     setFormEls(els)
     setDisabledKeys(_disabledKeys)
-  }, [layout, errors, setFormFields])
+  }, [layout, errors, setFormFields, formValues])
 
   return (
     <div>
