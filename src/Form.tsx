@@ -57,7 +57,7 @@ export type FormProps<
 
 const isValueDefined = (val: any) => {
   if (Array.isArray(val)) return val.length
-  return val !== undefined && val !== null
+  return val !== undefined && val !== null && val !== ''
 }
 
 export default function Form<
@@ -101,10 +101,7 @@ export default function Form<
       Object.entries(fieldConfigs).every(([key, config]) => {
         if (!config.generateProps) return true
         if (!config.generateProps(propGeneratorOptions).required) return true
-        const val = formValues[key]
-
-        if (Array.isArray(val)) return val.length
-        return val !== undefined && val !== null
+        return isValueDefined(formValues[key])
       })
     )
   }, [formValues, propGeneratorOptions, fieldConfigs])

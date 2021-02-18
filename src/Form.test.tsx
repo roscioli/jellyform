@@ -133,6 +133,15 @@ describe('submit button', () => {
     )
   })
 
+  it('disables submission when form has an empty string value', () => {
+    const { getByTestId } = renderWithProps({
+      formValues: { ...getFormInitialState(), str1: '' }
+    })
+    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
+      true
+    )
+  })
+
   it('disables submission when form has errors', () => {
     const { getByTestId } = renderWithProps({
       formValues: { ...getFormInitialState(), num1: 101 }
