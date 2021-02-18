@@ -57,6 +57,8 @@ const getFormProps = (): FormProps<FakeForm, {}, InputComponentProps> => ({
     },
     str1: {
       Component: InputText,
+      getError: (f) =>
+        f.str1 === 'error text' ? 'String can not be "error text"' : null,
       generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
     },
     num2: { Component: InputText },
@@ -90,84 +92,88 @@ const renderWithProps = (
   )
 
 describe('submit button', () => {
-  it('enables submission', () => {
-    const { getByTestId } = renderWithProps({})
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      false
-    )
-  })
-
-  it('disables submission when form is incomplete', () => {
-    const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), num1: undefined }
-    })
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      true
-    )
-  })
-
-  it('disables submission when form has an empty array value', () => {
-    const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), catchall: [] }
-    })
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      true
-    )
-  })
-
-  it('enables submission when form has a 0 value', () => {
-    const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), num1: 0 }
-    })
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      false
-    )
-  })
-
-  it('disables submission when form has a null value', () => {
-    const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), catchall: null }
-    })
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      true
-    )
-  })
-
-  it('disables submission when form has an empty string value', () => {
-    const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), str1: '' }
-    })
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      true
-    )
-  })
-
-  it('disables submission when form has errors', () => {
-    const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), num1: 101 }
-    })
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      true
-    )
-  })
-
-  it('disables button on submit', () => {
-    const { getByTestId } = renderWithProps({})
-    fireEvent.click(getByTestId('submitButton'))
-    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-      true
-    )
-  })
-
-  it('reenables button on submit complete', async () => {
-    const submitForm = () => new Promise((resolve) => setTimeout(resolve, 1))
-    const { getByTestId } = renderWithProps({ submitForm })
-    fireEvent.click(getByTestId('submitButton'))
-
-    await wait(() => {
+  describe('pre-submission', () => {
+    it('enables submission', () => {
+      const { getByTestId } = renderWithProps({})
       expect(
         (getByTestId('submitButton') as HTMLButtonElement).disabled
       ).toEqual(false)
+    })
+
+    it('disables submission when form is incomplete', () => {
+      const { getByTestId } = renderWithProps({
+        formValues: { ...getFormInitialState(), num1: undefined }
+      })
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(true)
+    })
+
+    it('disables submission when form has an empty array value', () => {
+      const { getByTestId } = renderWithProps({
+        formValues: { ...getFormInitialState(), catchall: [] }
+      })
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(true)
+    })
+
+    it('enables submission when form has a 0 value', () => {
+      const { getByTestId } = renderWithProps({
+        formValues: { ...getFormInitialState(), num1: 0 }
+      })
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(false)
+    })
+
+    it('disables submission when form has a null value', () => {
+      const { getByTestId } = renderWithProps({
+        formValues: { ...getFormInitialState(), catchall: null }
+      })
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(true)
+    })
+
+    it('disables submission when form has an empty string value', () => {
+      const { getByTestId } = renderWithProps({
+        formValues: { ...getFormInitialState(), str1: '' }
+      })
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(true)
+    })
+
+    it('disables submission when form has errors', () => {
+      const { getByTestId } = renderWithProps({
+        formValues: { ...getFormInitialState(), num1: 101 }
+      })
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(true)
+    })
+  })
+
+  describe('post-submission', () => {
+    it('disables button on submit', () => {
+      const { getByTestId } = renderWithProps({})
+      fireEvent.click(getByTestId('submitButton'))
+      expect(
+        (getByTestId('submitButton') as HTMLButtonElement).disabled
+      ).toEqual(true)
+    })
+
+    it('reenables button on submit complete', async () => {
+      const submitForm = () => new Promise((resolve) => setTimeout(resolve, 1))
+      const { getByTestId } = renderWithProps({ submitForm })
+      fireEvent.click(getByTestId('submitButton'))
+
+      await wait(() => {
+        expect(
+          (getByTestId('submitButton') as HTMLButtonElement).disabled
+        ).toEqual(false)
+      })
     })
   })
 })
