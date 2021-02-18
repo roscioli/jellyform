@@ -1,9 +1,13 @@
 import { fireEvent, render, wait } from '@testing-library/react'
 import React, { useEffect, useState } from 'react'
-import { InputText } from './InputText'
+import { InputText, InputTextProps } from './InputText'
 import Form, { FieldConfigs, FormProps } from './Form'
-import { InputSelectOption } from './utils'
-import { InputSelect, MultiSelect } from './InputSelect'
+import {
+  getOption,
+  getOptionWithDifferentLabel,
+  InputSelectOption
+} from './utils'
+import { InputSelect, InputSelectProps, MultiSelect } from './InputSelect'
 
 const originalError = console.error
 
@@ -40,7 +44,9 @@ const getBaseFormProps = () => ({
   setForm: jest.fn()
 })
 
-const getFormProps = (): FormProps<FakeForm> => ({
+type InputComponentProps = InputTextProps | InputSelectProps
+
+const getFormProps = (): FormProps<FakeForm, {}, InputComponentProps> => ({
   ...getBaseFormProps(),
   formValues: getFormInitialState(),
   fieldConfigs: {
@@ -58,7 +64,16 @@ const getFormProps = (): FormProps<FakeForm> => ({
       Component: InputText,
       generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
     },
-    sel1: { Component: InputSelect },
+    sel1: {
+      Component: InputSelect,
+      staticProps: {
+        label: 'select label',
+        options: [
+          getOptionWithDifferentLabel('sel1 val1', 'this is fine'),
+          getOptionWithDifferentLabel('sel1 val2', 'this is an error')
+        ]
+      }
+    },
     catchall: {
       Component: MultiSelect,
       generateProps: () => ({ required: true })
@@ -67,8 +82,12 @@ const getFormProps = (): FormProps<FakeForm> => ({
   layout: [['num1', 'str1'], ['num2', 'str2'], ['sel1']]
 })
 
-const renderWithProps = (props: Partial<FormProps<FakeForm>>) =>
-  render(<Form<FakeForm> {...getFormProps()} {...props} />)
+const renderWithProps = (
+  props: Partial<FormProps<FakeForm, {}, InputComponentProps>>
+) =>
+  render(
+    <Form<FakeForm, {}, InputComponentProps> {...getFormProps()} {...props} />
+  )
 
 describe('submit button', () => {
   it('enables submission', () => {
@@ -223,7 +242,7 @@ describe('rendering', () => {
       expect.stringContaining('str2')
     ])
     expect(labelEls[2].length).toEqual(1)
-    expect(labelEls[2]).toEqual([expect.stringContaining('sel1')])
+    expect(labelEls[2]).toEqual([expect.stringContaining('select label')])
   })
 })
 

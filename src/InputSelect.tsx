@@ -1,11 +1,9 @@
 import React from 'react'
 import Field from './Field'
 import Select, { SelectChangeValue } from './Select'
-// import { Field, Select, SelectChangeValue } from '@pinwheel/uikit'
-// import { getErrorStateCss } from '../TestConsole/form-helpers'
 import { ErrorMessage, getDisabledClass } from './utils'
 
-interface InputSelectProps {
+export interface InputSelectProps {
   error?: string
   name: string
   required?: boolean

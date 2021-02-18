@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { InputSelect } from './InputSelect'
 import { stubObject } from './utils'
 
 type StringKeyObject = { [key: string]: any }
@@ -17,39 +16,54 @@ type PartialRecordOfFormValues<
   V = T[keyof T]
 > = Partial<Record<keyof T, V>>
 
-type FieldConfig<FormValues, PropGeneratorOptions> = {
+type FieldConfig<FormValues, PropGeneratorOptions, PossibleComponentProps> = {
   Component: React.FC<any>
-  staticProps?: StaticProps
+  staticProps?: StaticProps & Partial<PossibleComponentProps>
   generateProps?: (
     options: PropGeneratorOptions & {
       formValues: FormValues
       setFormFields: (fields: PartialRecordOfFormValues<FormValues>) => void
     }
-  ) => GeneratedProps
+  ) => StaticProps & Partial<PossibleComponentProps>
   getError?: (form: FormValues) => string | null
 }
 
 export type FieldConfigs<
   FormValues extends StringKeyObject,
-  PropGeneratorOptions extends object = {}
-> = Record<keyof FormValues, FieldConfig<FormValues, PropGeneratorOptions>>
+  PropGeneratorOptions extends object = {},
+  PossibleComponentProps extends object = {}
+> = Record<
+  keyof FormValues,
+  FieldConfig<FormValues, PropGeneratorOptions, PossibleComponentProps>
+>
 
 export type FormProps<
   FormValues extends StringKeyObject,
-  PropGeneratorOptions extends object = {}
+  PropGeneratorOptions extends object = {},
+  PossibleComponentProps extends object = {}
 > = {
   propGeneratorOptions?: PropGeneratorOptions
   formValues: FormValues
   setForm: (state: FormValues) => void
-  fieldConfigs: FieldConfigs<FormValues, PropGeneratorOptions>
+  fieldConfigs: FieldConfigs<
+    FormValues,
+    PropGeneratorOptions,
+    PossibleComponentProps
+  >
   layout: (keyof FormValues)[][]
   submitForm: (submission: Partial<FormValues>) => Promise<any>
   submitButtonText?: string
 }
 
+const isValueDefined = (val: any) => {
+  if (Array.isArray(val)) return val.length
+  return val !== undefined && val !== null
+}
+
 export default function Form<
   FormValues extends StringKeyObject,
-  PropGeneratorOptions extends object = {}
+  PropGeneratorOptions extends object = {},
+  PossibleComponentProps extends object = {}
 >({
   propGeneratorOptions: _propGenOpts = {} as PropGeneratorOptions,
   formValues,
@@ -58,7 +72,7 @@ export default function Form<
   layout,
   submitForm,
   submitButtonText
-}: FormProps<FormValues, PropGeneratorOptions>) {
+}: FormProps<FormValues, PropGeneratorOptions, PossibleComponentProps>) {
   const setFormFields = useCallback(
     (fields: PartialRecordOfFormValues<FormValues>) => {
       setForm({ ...formValues, ...fields })
@@ -82,38 +96,30 @@ export default function Form<
     [isSubmitting, isFormComplete, errors]
   )
 
-  const getValue = useCallback(
-    (key: string) =>
-      fieldConfigs[key].Component === InputSelect
-        ? formValues[key]?.value
-        : formValues[key],
-    [fieldConfigs, formValues]
-  )
-
   useEffect(() => {
     setIsFormComplete(
       Object.entries(fieldConfigs).every(([key, config]) => {
         if (!config.generateProps) return true
         if (!config.generateProps(propGeneratorOptions).required) return true
-        const val = getValue(key)
+        const val = formValues[key]
 
         if (Array.isArray(val)) return val.length
         return val !== undefined && val !== null
       })
     )
-  }, [formValues, propGeneratorOptions, fieldConfigs, getValue])
+  }, [formValues, propGeneratorOptions, fieldConfigs])
 
   useEffect(() => {
     setErrors(
       Object.entries(fieldConfigs).reduce((acc, [key, { getError }]) => {
-        const value = getValue(key)
+        const value = formValues[key]
         Object.assign(acc, {
           [key]: value && getError ? getError(formValues) : null
         })
         return acc
       }, {} as PartialRecordOfFormValues<FormValues, string>)
     )
-  }, [fieldConfigs, getValue, formValues])
+  }, [fieldConfigs, formValues])
 
   useEffect(() => {
     const _disabledKeys: Set<keyof FormValues> = new Set()

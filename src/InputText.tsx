@@ -1,7 +1,7 @@
 import React from 'react'
 import { ErrorMessage, getDisabledClass, getLabelText } from './utils'
 
-interface InputTextProps {
+export interface InputTextProps {
   name: string
   required?: boolean
   error?: string
