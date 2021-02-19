@@ -178,6 +178,7 @@ export function Jellyform<
       <div>{formEls}</div>
       <button
         data-testid='submitButton'
+        className={getCssClassName('submitButton')}
         disabled={disabled}
         onClick={async () => {
           setIsSubmitting(true)

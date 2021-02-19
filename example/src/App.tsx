@@ -7,9 +7,11 @@ const App = () => {
   const initialProps = useMemo(() => _fixture.getFormProps(), [])
 
   return (
-    <Jellyform<_FakeForm, {}, _InputComponentProps>
+    <div style={{width: '800px', margin: '100px auto'}}>
+      <Jellyform<_FakeForm, {}, _InputComponentProps>
       {...initialProps}
     />
+    </div>
   )
 }
 

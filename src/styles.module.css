@@ -1,7 +1,7 @@
 .formRow {
   display: flex;
   flex-direction: row;
-  height: 60px;
+  height: 80px;
 }
 
 .formRow > div:not(:last-child) {
@@ -12,6 +12,14 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.fieldBlock label {
+  margin-bottom: 10px;
+}
+
+.fieldBlock input {
+  padding: 10px;
 }
 
 .fieldBlock-errorText {
