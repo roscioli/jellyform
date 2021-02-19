@@ -79,7 +79,6 @@ export default function Form<
     },
     [formValues, setForm]
   )
-  const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
   const [errors, setErrors] = useState<
     PartialRecordOfFormValues<FormValues, string>
   >({})
@@ -108,6 +107,7 @@ export default function Form<
       FormValues,
       StaticProps & Partial<PossibleComponentProps>
     > = {}
+    const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
     const _disabledKeys: Set<keyof FormValues> = new Set()
     let _isFormComplete = true
 
@@ -137,7 +137,7 @@ export default function Form<
     setErrors(_errors)
     setAllProps(_allProps)
     setDisabledKeys(_disabledKeys)
-  }, [formValues, fieldConfigs])
+  }, [formValues, fieldConfigs, setFormFields])
 
   useEffect(() => {
     if (!Object.keys(allProps).length) return
