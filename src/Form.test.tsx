@@ -4,7 +4,6 @@ import { InputText } from './InputText'
 import Form, { FieldConfigs, FormProps } from './Form'
 import {
   FakeForm,
-  getBaseFormProps,
   getFormInitialState,
   getFormProps,
   InputComponentProps
@@ -22,11 +21,20 @@ console.error = (s: string, ...args: any) => {
   }
 }
 
+export const getBaseFormProps = () => ({
+  submitForm: jest.fn(),
+  setForm: jest.fn()
+})
+
 const renderWithProps = (
   props: Partial<FormProps<FakeForm, {}, InputComponentProps>>
 ) =>
   render(
-    <Form<FakeForm, {}, InputComponentProps> {...getFormProps()} {...props} />
+    <Form<FakeForm, {}, InputComponentProps>
+      {...getFormProps()}
+      {...getBaseFormProps()}
+      {...props}
+    />
   )
 
 it('enables submission', () => {
@@ -207,6 +215,16 @@ describe('rendering', () => {
     ])
     expect(labelEls[2].length).toEqual(1)
     expect(labelEls[2]).toEqual([expect.stringContaining('select label')])
+  })
+
+  it('renders submit button text', () => {
+    const { getByTestId } = renderWithProps({ submitButtonText: 'Done' })
+    expect(getByTestId('submitButton').innerHTML).toEqual('Done')
+  })
+
+  it('renders submit button text with default text', () => {
+    const { getByTestId } = renderWithProps({})
+    expect(getByTestId('submitButton').innerHTML).toEqual('Submit')
   })
 })
 

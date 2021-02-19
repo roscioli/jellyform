@@ -59,7 +59,7 @@ const isValueDefined = (val: any) => {
   return val !== undefined && val !== null && val !== ''
 }
 
-export default function Form<
+export function Jellyform<
   FormValues extends StringKeyObject,
   PropGeneratorOptions extends object = {},
   PossibleComponentProps extends object = {}
@@ -184,8 +184,10 @@ export default function Form<
           setIsSubmitting(false)
         }}
       >
-        {submitButtonText}
+        {submitButtonText || 'Submit'}
       </button>
     </div>
   )
 }
+
+export default Jellyform

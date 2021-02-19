@@ -23,11 +23,6 @@ export const getFormInitialState = (
   ...override
 })
 
-export const getBaseFormProps = () => ({
-  submitForm: jest.fn(),
-  setForm: jest.fn()
-})
-
 export type InputComponentProps = InputTextProps | InputSelectProps
 
 export const getFormProps = (): FormProps<
@@ -35,7 +30,8 @@ export const getFormProps = (): FormProps<
   {},
   InputComponentProps
 > => ({
-  ...getBaseFormProps(),
+  submitForm: () => Promise.resolve(),
+  setForm: () => Promise.resolve(),
   formValues: getFormInitialState(),
   fieldConfigs: {
     num1: {

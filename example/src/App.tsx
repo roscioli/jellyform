@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { ExampleComponent } from 'jellyform'
+import Jellyform, {_FakeForm, _InputComponentProps, _fixture} from 'jellyform'
 import 'jellyform/dist/index.css'
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
+  return <Jellyform<_FakeForm, {}, _InputComponentProps> {..._fixture.getFormProps()} />
 }
 
 export default App

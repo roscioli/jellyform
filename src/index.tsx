@@ -1,9 +1,11 @@
-// import * as React from 'react'
-// import styles from './styles.module.css'
-import Form from './Form'
+import * as FormImports from './Form'
+export type { FieldConfigs, FormProps } from './Form'
 
-// interface Props {
-//   text: string
-// }
+export * as _fixture from './fixture'
+export type {
+  FakeForm as _FakeForm,
+  InputComponentProps as _InputComponentProps
+} from './fixture'
 
-export default Form
+const Jellyform = FormImports.Jellyform
+export default Jellyform
