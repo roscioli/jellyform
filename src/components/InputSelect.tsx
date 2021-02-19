@@ -1,8 +1,8 @@
 import React from 'react'
-import Select, { ValueType } from 'react-select'
+import Select, { ValueType, Props } from 'react-select'
 import Field from './Field'
 
-export interface InputSelectProps {
+export type InputSelectProps = {
   error?: string
   name: string
   required?: boolean
@@ -17,7 +17,7 @@ export interface InputSelectProps {
   customStyles?: any
   disabled?: boolean
   label: string
-}
+} & Partial<Props>
 
 type SelectChangeValue = ValueType<any, any> | null | undefined
 
@@ -45,28 +45,6 @@ export const InputSelect = (props: InputSelectProps) => {
       error={error}
     >
       <Select
-        id={name}
-        name={name}
-        isDisabled={disabled}
-        {...rest}
-        components={{ DropdownIndicator }}
-      />
-    </Field>
-  )
-}
-
-export const MultiSelect = (props: InputSelectProps) => {
-  const { name, required, error, disabled, label, ...rest } = props
-  return (
-    <Field
-      label={label}
-      name={name}
-      required={required}
-      disabled={disabled}
-      error={error}
-    >
-      <Select
-        isMulti
         id={name}
         name={name}
         isDisabled={disabled}

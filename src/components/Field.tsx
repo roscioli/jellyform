@@ -1,5 +1,5 @@
 import React from 'react'
-import { ErrorMessage, getCssClassName, getLabelText } from '../utils'
+import { getCssClassName, getLabelText } from '../utils'
 
 export type FieldProps = {
   label: string
@@ -33,7 +33,9 @@ export const Field: React.FC<FieldProps> = ({
     <div className={className}>
       <label htmlFor={name}>{getLabelText(label, required)}</label>
       {inputElement}
-      <ErrorMessage error={error} />
+      <div className={getCssClassName('fieldBlock-errorText')}>
+        {error ? <span>{error}</span> : null}
+      </div>
     </div>
   )
 }

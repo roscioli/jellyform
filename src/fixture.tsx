@@ -1,10 +1,6 @@
 import { InputText, InputTextProps } from './components/InputText'
 import { getOptionWithDifferentLabel, InputSelectOption } from './utils'
-import {
-  InputSelect,
-  InputSelectProps,
-  MultiSelect
-} from './components/InputSelect'
+import { InputSelect, InputSelectProps } from './components/InputSelect'
 import { FormProps } from './Form'
 
 export type FakeForm = {
@@ -68,7 +64,10 @@ export const getFormProps = (): FormProps<
       }
     },
     catchall: {
-      Component: MultiSelect,
+      Component: InputSelect,
+      staticProps: {
+        isMulti: undefined
+      },
       generateProps: () => ({ required: true })
     }
   },
