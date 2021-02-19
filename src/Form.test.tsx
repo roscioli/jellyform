@@ -344,3 +344,14 @@ describe('input component props', () => {
     await wait(() => expect(getByLabelText('new label')).toBeTruthy())
   })
 })
+
+describe('performance', () => {
+  it('generates props once per render per field', () => {
+    const formProps = getFormProps()
+    formProps.fieldConfigs.num1.generateProps = jest.fn(
+      formProps.fieldConfigs.num1.generateProps
+    )
+    render(<Form<FakeForm, {}, InputComponentProps> {...formProps} />)
+    expect(formProps.fieldConfigs.num1.generateProps).toHaveBeenCalledTimes(1)
+  })
+})
