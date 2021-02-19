@@ -59,6 +59,7 @@ export const getFormProps = (): FormProps<
     },
     sel1: {
       Component: InputSelect,
+      getActualValue: (v: InputSelectOption) => v && v.value,
       staticProps: {
         label: 'select label',
         options: [
@@ -71,6 +72,7 @@ export const getFormProps = (): FormProps<
     },
     catchall: {
       Component: InputSelect,
+      getActualValue: (v: InputSelectOption) => v && v.value,
       staticProps: {
         isMulti: undefined
       },

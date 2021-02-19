@@ -26,6 +26,7 @@ type FieldConfig<FormValues, PropGeneratorOptions, PossibleComponentProps> = {
     }
   ) => StaticProps & Partial<PossibleComponentProps>
   getError?: (form: FormValues) => string | null
+  getActualValue?: (val: any) => any
 }
 
 export type FieldConfigs<
@@ -59,6 +60,8 @@ const isValueDefined = (val: any) => {
   if (Array.isArray(val)) return val.length
   return val !== undefined && val !== null && val !== ''
 }
+
+const identity = (x: any) => x
 
 export function Jellyform<
   FormValues extends StringKeyObject,
@@ -115,27 +118,31 @@ export function Jellyform<
     const _disabledKeys: Set<keyof FormValues> = new Set()
     let _isFormComplete = true
 
-    for (const [
-      fieldKey,
-      { generateProps, staticProps, getError }
-    ] of Object.entries(fieldConfigs)) {
-      const value = formValues[fieldKey]
-      const generatedProps =
-        generateProps && generateProps(propGeneratorOptions)
+    for (const row of layout)
+      for (const fieldKey of row) {
+        const {
+          generateProps,
+          staticProps,
+          getError,
+          getActualValue = identity
+        } = fieldConfigs[fieldKey]
+        const value = getActualValue(formValues[fieldKey])
+        const generatedProps =
+          generateProps && generateProps(propGeneratorOptions)
 
-      const props = Object.assign(generatedProps || {}, staticProps)
+        const props = Object.assign(generatedProps || {}, staticProps)
 
-      Object.assign(_errors, {
-        [fieldKey]:
-          value && getError && !props.disabled ? getError(formValues) : null
-      })
+        Object.assign(_errors, {
+          [fieldKey]:
+            value && getError && !props.disabled ? getError(formValues) : null
+        })
 
-      Object.assign(_allProps, { [fieldKey]: props })
+        Object.assign(_allProps, { [fieldKey]: props })
 
-      if (props.disabled) _disabledKeys.add(fieldKey)
+        if (props.disabled) _disabledKeys.add(fieldKey)
 
-      if (props.required && !isValueDefined(value)) _isFormComplete = false
-    }
+        if (props.required && !isValueDefined(value)) _isFormComplete = false
+      }
 
     setIsFormComplete(_isFormComplete)
     setErrors(_errors)

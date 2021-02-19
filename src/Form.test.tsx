@@ -65,7 +65,12 @@ describe('incomplete state', () => {
 
   it('disables submission when form has an empty array value', () => {
     const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), catchall: [] }
+      formValues: { ...getFormInitialState(), catchall: [] },
+      layout: [
+        ['num1', 'str1'],
+        ['num2', 'str2'],
+        ['sel1', 'catchall']
+      ]
     })
     expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
       true
@@ -74,7 +79,12 @@ describe('incomplete state', () => {
 
   it('disables submission when form has a null value', () => {
     const { getByTestId } = renderWithProps({
-      formValues: { ...getFormInitialState(), catchall: null }
+      formValues: { ...getFormInitialState(), catchall: null },
+      layout: [
+        ['num1', 'str1'],
+        ['num2', 'str2'],
+        ['sel1', 'catchall']
+      ]
     })
     expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
       true
