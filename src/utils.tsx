@@ -10,12 +10,11 @@ export const ErrorMessage = ({ error }: { error?: string }) => (
 export const getLabelText = (label: string, required?: boolean) => (
   <Fragment>
     {label}
-    {required ? <span className='jf-form-field-asterisk'> *</span> : null}
+    {required ? (
+      <span className={getCssClassName('form-field-asterisk')}> *</span>
+    ) : null}
   </Fragment>
 )
-
-export const getDisabledClass = (disabled?: boolean) =>
-  disabled ? 'jf-form-field-disabled' : ''
 
 export type InputSelectOption<T = string, U = T> = { value: T; label: U }
 

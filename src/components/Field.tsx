@@ -1,7 +1,7 @@
 import React from 'react'
 import { ErrorMessage, getCssClassName, getLabelText } from '../utils'
 
-interface IProps {
+export type FieldProps = {
   label: string
   name: string
   required: boolean | undefined
@@ -13,7 +13,7 @@ const FORM_FIELD_CLASS = getCssClassName('form-field')
 const DISABLED_FORM_FIELD_CLASS =
   FORM_FIELD_CLASS + ' ' + getCssClassName('form-field-disabled')
 
-export const Field: React.FC<IProps> = ({
+export const Field: React.FC<FieldProps> = ({
   label,
   children: inputElement,
   name,

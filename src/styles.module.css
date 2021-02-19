@@ -14,3 +14,11 @@
   display: flex;
   flex-direction: column;
 }
+
+.form-field-error {
+  color: rgb(223, 86, 87);
+}
+
+.form-field-asterisk {
+  color: rgb(223, 86, 87);
+}
