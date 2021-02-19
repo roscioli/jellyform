@@ -65,16 +65,20 @@ export function Jellyform<
   PossibleComponentProps extends object = {}
 >({
   propGeneratorOptions: _propGenOpts = {} as PropGeneratorOptions,
-  formValues,
+  formValues: _formValues,
   onFormChange,
   fieldConfigs,
   layout,
   onFormSubmit,
   submitButtonText
 }: FormProps<FormValues, PropGeneratorOptions, PossibleComponentProps>) {
+  const [formValues, setFormValues] = useState(_formValues)
+
   const setFormFields = useCallback(
     (fields: PartialRecordOfFormValues<FormValues>) => {
-      onFormChange({ ...formValues, ...fields })
+      const newForm = { ...formValues, ...fields }
+      setFormValues(newForm)
+      onFormChange(newForm)
     },
     [formValues, onFormChange]
   )

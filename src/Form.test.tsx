@@ -312,3 +312,12 @@ describe('performance', () => {
     expect(formProps.fieldConfigs.num1.generateProps).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('field changes', () => {
+  it('updates the field', () => {
+    const { getByTestId } = renderWithProps({})
+    const inputEl = getByTestId('input-num1') as HTMLInputElement
+    fireEvent.change(inputEl, { target: { value: 999 } })
+    expect(inputEl.value).toEqual('999')
+  })
+})
