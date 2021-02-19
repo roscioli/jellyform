@@ -10,6 +10,10 @@ const App = () => {
     <div style={{width: '800px', margin: '100px auto'}}>
       <Jellyform<_FakeForm, {}, _InputComponentProps>
       {...initialProps}
+      onFormSubmit={(f) => {
+        console.log(f)
+        return new Promise(resolve => setTimeout(resolve, 1500))
+      }}
     />
     </div>
   )

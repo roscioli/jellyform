@@ -59,7 +59,7 @@ export const getFormProps = (): FormProps<
         label: 'select label',
         options: [
           getOptionWithDifferentLabel('sel1 val1', 'this is fine'),
-          getOptionWithDifferentLabel('sel1 val2', 'this is an error')
+          getOptionWithDifferentLabel('sel1 val2', 'this is fine too')
         ]
       }
     },
