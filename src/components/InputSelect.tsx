@@ -1,6 +1,6 @@
 import React from 'react'
 import Select, { ValueType, Props } from 'react-select'
-import Field from './Field'
+import FieldBlock from './FieldBlock'
 
 export type InputSelectProps = {
   error?: string
@@ -37,7 +37,7 @@ const DropdownIndicator = () => {
 export const InputSelect = (props: InputSelectProps) => {
   const { label, name, required, disabled, error, ...rest } = props
   return (
-    <Field
+    <FieldBlock
       label={label}
       name={name}
       required={required}
@@ -51,6 +51,6 @@ export const InputSelect = (props: InputSelectProps) => {
         {...rest}
         components={{ DropdownIndicator }}
       />
-    </Field>
+    </FieldBlock>
   )
 }

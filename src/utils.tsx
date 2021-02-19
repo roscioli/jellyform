@@ -1,14 +1,4 @@
-import React, { Fragment } from 'react'
 import styles from './styles.module.css'
-
-export const getLabelText = (label: string, required?: boolean) => (
-  <Fragment>
-    {label}
-    {required ? (
-      <span className={getCssClassName('fieldBlock-asterisk')}> *</span>
-    ) : null}
-  </Fragment>
-)
 
 export type InputSelectOption<T = string, U = T> = { value: T; label: U }
 

@@ -1,8 +1,8 @@
 import * as FormImports from './Form'
 export type { FieldConfigs, FormProps } from './Form'
 
-export * as Field from './components/Field'
-export type { FieldProps } from './components/Field'
+export * as FieldBlock from './components/FieldBlock'
+export type { FieldProps } from './components/FieldBlock'
 
 export * as InputSelect from './components/InputSelect'
 export type { InputSelectProps } from './components/InputSelect'

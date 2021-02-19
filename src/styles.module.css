@@ -1,6 +1,7 @@
 .formRow {
   display: flex;
   flex-direction: row;
+  height: 60px;
 }
 
 .formRow > div:not(:last-child) {

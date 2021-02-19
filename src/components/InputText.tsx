@@ -1,5 +1,5 @@
 import React from 'react'
-import Field from './Field'
+import FieldBlock from './FieldBlock'
 
 export interface InputTextProps {
   name: string
@@ -25,7 +25,7 @@ export const InputText = (props: InputTextProps) => {
     disabled
   } = props
   return (
-    <Field
+    <FieldBlock
       label={label}
       name={name}
       required={required}
@@ -40,6 +40,6 @@ export const InputText = (props: InputTextProps) => {
         value={value}
         disabled={disabled}
       />
-    </Field>
+    </FieldBlock>
   )
 }

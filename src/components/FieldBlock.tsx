@@ -1,5 +1,5 @@
-import React from 'react'
-import { getCssClassName, getLabelText } from '../utils'
+import React, { Fragment } from 'react'
+import { getCssClassName } from '../utils'
 
 export type FieldProps = {
   label: string
@@ -15,7 +15,23 @@ const DISABLED_FORM_FIELD_CLASS =
 const ERROR_FORM_FIELD_CLASS =
   FORM_FIELD_CLASS + ' ' + getCssClassName('fieldBlock-error')
 
-export const Field: React.FC<FieldProps> = ({
+export const getLabelText = (label: string, required?: boolean) => (
+  <Fragment>
+    {label}
+    {required ? (
+      <span className={getCssClassName('fieldBlock-asterisk')}> *</span>
+    ) : null}
+  </Fragment>
+)
+
+const getFieldBlockClassName = (error?: string, disabled?: boolean) =>
+  error
+    ? ERROR_FORM_FIELD_CLASS
+    : disabled
+    ? DISABLED_FORM_FIELD_CLASS
+    : FORM_FIELD_CLASS
+
+export const FieldBlock: React.FC<FieldProps> = ({
   label,
   children: inputElement,
   name,
@@ -23,14 +39,8 @@ export const Field: React.FC<FieldProps> = ({
   error,
   disabled
 }) => {
-  const className = error
-    ? ERROR_FORM_FIELD_CLASS
-    : disabled
-    ? DISABLED_FORM_FIELD_CLASS
-    : FORM_FIELD_CLASS
-
   return (
-    <div className={className}>
+    <div className={getFieldBlockClassName(error, disabled)}>
       <label htmlFor={name}>{getLabelText(label, required)}</label>
       {inputElement}
       <div className={getCssClassName('fieldBlock-errorText')}>
@@ -40,4 +50,4 @@ export const Field: React.FC<FieldProps> = ({
   )
 }
 
-export default Field
+export default FieldBlock
