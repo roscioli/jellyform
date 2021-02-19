@@ -55,7 +55,10 @@ const getFormProps = (): FormProps<FakeForm, {}, InputComponentProps> => ({
       Component: InputText,
       getError: (f) =>
         f.str1 === 'error text' ? 'String can not be "error text"' : null,
-      generateProps: ({ formValues: f }) => ({ required: !!f.num1 })
+      generateProps: ({ formValues: f }) => ({
+        required: !!f.num1,
+        disabled: f.str2 === 'this will trigger str1 to error'
+      })
     },
     num2: { Component: InputText },
     str2: {
@@ -151,14 +154,18 @@ describe('errors', () => {
     )
   })
 
-  // it('does not check for errors if field is disabled', () => {
-  //   const { getByTestId } = renderWithProps({
-  //     formValues: { ...getFormInitialState(), str1: 'error text' }
-  //   })
-  //   expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
-  //     true
-  //   )
-  // })
+  it('does not evaluate to error if field is disabled', () => {
+    const { getByTestId } = renderWithProps({
+      formValues: {
+        ...getFormInitialState(),
+        str1: 'error text',
+        str2: 'this will trigger str1 to error'
+      }
+    })
+    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
+      false
+    )
+  })
 })
 
 describe('submission', () => {

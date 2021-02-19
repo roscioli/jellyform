@@ -108,13 +108,18 @@ export default function Form<
 
   useEffect(() => {
     setErrors(
-      Object.entries(fieldConfigs).reduce((acc, [key, { getError }]) => {
-        const value = formValues[key]
-        Object.assign(acc, {
-          [key]: value && getError ? getError(formValues) : null
-        })
-        return acc
-      }, {} as PartialRecordOfFormValues<FormValues, string>)
+      Object.entries(fieldConfigs).reduce(
+        (acc, [key, { getError, generateProps }]) => {
+          const value = formValues[key]
+          const ps = generateProps && generateProps(propGeneratorOptions)
+          const disabled = ps && ps.disabled
+          Object.assign(acc, {
+            [key]: value && getError && !disabled ? getError(formValues) : null
+          })
+          return acc
+        },
+        {} as PartialRecordOfFormValues<FormValues, string>
+      )
     )
   }, [fieldConfigs, formValues])
 
@@ -129,6 +134,8 @@ export default function Form<
             staticProps
           } = fieldConfigs[key as string]
 
+          const generatedProps = generateProps(propGeneratorOptions)
+
           const props: GeneratedProps = {
             'data-testid': `input-${key}`,
             name: key,
@@ -142,7 +149,7 @@ export default function Form<
             },
             error: errors[key],
             ...staticProps,
-            ...generateProps(propGeneratorOptions)
+            ...generatedProps
           }
 
           if ('disabled' in props && props.disabled) _disabledKeys.add(key)
