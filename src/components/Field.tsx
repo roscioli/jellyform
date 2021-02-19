@@ -12,6 +12,8 @@ export type FieldProps = {
 const FORM_FIELD_CLASS = getCssClassName('form-field')
 const DISABLED_FORM_FIELD_CLASS =
   FORM_FIELD_CLASS + ' ' + getCssClassName('form-field-disabled')
+const ERROR_FORM_FIELD_CLASS =
+  FORM_FIELD_CLASS + ' ' + getCssClassName('form-field-error')
 
 export const Field: React.FC<FieldProps> = ({
   label,
@@ -21,8 +23,14 @@ export const Field: React.FC<FieldProps> = ({
   error,
   disabled
 }) => {
+  const className = error
+    ? ERROR_FORM_FIELD_CLASS
+    : disabled
+    ? DISABLED_FORM_FIELD_CLASS
+    : FORM_FIELD_CLASS
+
   return (
-    <div className={disabled ? DISABLED_FORM_FIELD_CLASS : FORM_FIELD_CLASS}>
+    <div className={className}>
       <label htmlFor={name}>{getLabelText(label, required)}</label>
       {inputElement}
       <ErrorMessage error={error} />

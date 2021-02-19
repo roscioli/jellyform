@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import styles from './styles.module.css'
 
 export const ErrorMessage = ({ error }: { error?: string }) => (
-  <div className='jf-form-field-error'>
+  <div className={getCssClassName('form-field-errorText')}>
     {error ? <span>{error}</span> : null}
   </div>
 )

@@ -15,7 +15,7 @@
   flex-direction: column;
 }
 
-.form-field-error {
+.form-field-errorText {
   color: rgb(223, 86, 87);
 }
 
