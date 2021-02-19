@@ -1,6 +1,6 @@
 {
   "name": "jellyform",
-  "version": "1.0.0",
+  "version": "0.0.0-beta",
   "description": "Simple, declarative, lightweight React form",
   "author": "roscioli",
   "license": "MIT",
