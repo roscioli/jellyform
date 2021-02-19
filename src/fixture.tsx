@@ -1,5 +1,9 @@
 import { InputText, InputTextProps } from './components/InputText'
-import { getOptionWithDifferentLabel, InputSelectOption } from './utils'
+import {
+  getEmptyOption,
+  getOptionWithDifferentLabel,
+  InputSelectOption
+} from './utils'
 import { InputSelect, InputSelectProps } from './components/InputSelect'
 import { FormProps } from './Form'
 
@@ -58,9 +62,11 @@ export const getFormProps = (): FormProps<
       staticProps: {
         label: 'select label',
         options: [
+          getEmptyOption(),
           getOptionWithDifferentLabel('sel1 val1', 'this is fine'),
           getOptionWithDifferentLabel('sel1 val2', 'this is fine too')
-        ]
+        ],
+        required: true
       }
     },
     catchall: {

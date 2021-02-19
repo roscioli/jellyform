@@ -147,25 +147,25 @@ export function Jellyform<
     if (!Object.keys(allProps).length) return
     const els = layout.map((row, i) => (
       <div key={`row-${i}`} className={getCssClassName('formRow')}>
-        {row.map((key: keyof FormValues) => {
-          const { Component } = fieldConfigs[key as string]
+        {row.map((fieldKey: keyof FormValues) => {
+          const { Component } = fieldConfigs[fieldKey as string]
 
           const props: GeneratedProps = {
-            'data-testid': `input-${key}`,
-            name: key,
-            value: formValues[key],
-            label: key,
+            'data-testid': `input-${fieldKey}`,
+            name: fieldKey,
+            value: formValues[fieldKey],
+            label: fieldKey,
             form: formValues,
             onChange: (val: FormValues[keyof FormValues]) => {
               setFormFields({
-                [key]: val
+                [fieldKey]: val
               } as PartialRecordOfFormValues<FormValues>)
             },
-            error: errors[key],
-            ...allProps[key]
+            error: errors[fieldKey],
+            ...allProps[fieldKey]
           }
 
-          return <Component key={key} {...props} />
+          return <Component key={fieldKey} {...props} />
         })}
       </div>
     ))
