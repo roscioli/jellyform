@@ -1,5 +1,5 @@
 import React from 'react'
-import { ErrorMessage, getDisabledClass, getLabelText } from './utils'
+import { ErrorMessage, getLabelText } from '../utils'
 
 export interface InputTextProps {
   name: string
@@ -10,6 +10,7 @@ export interface InputTextProps {
   type: 'number' | 'text' | 'password' | 'email'
   onChange: (value: string) => void
   disabled?: boolean
+  className?: string
 }
 
 // eslint-disable-next-line import/prefer-default-export
@@ -22,10 +23,11 @@ export const InputText = (props: InputTextProps) => {
     value,
     required,
     error,
-    disabled
+    disabled,
+    className
   } = props
   return (
-    <div className={`form-field ${getDisabledClass(disabled)}`}>
+    <div className={className}>
       <label htmlFor={name}>{getLabelText(label, required)}</label>
       <input
         data-testid={`input-${name}`}

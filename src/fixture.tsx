@@ -1,6 +1,10 @@
-import { InputText, InputTextProps } from './InputText'
+import { InputText, InputTextProps } from './components/InputText'
 import { getOptionWithDifferentLabel, InputSelectOption } from './utils'
-import { InputSelect, InputSelectProps, MultiSelect } from './InputSelect'
+import {
+  InputSelect,
+  InputSelectProps,
+  MultiSelect
+} from './components/InputSelect'
 import { FormProps } from './Form'
 
 export type FakeForm = {

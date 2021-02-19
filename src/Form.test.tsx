@@ -1,6 +1,6 @@
 import { fireEvent, render, wait } from '@testing-library/react'
 import React, { useEffect, useState } from 'react'
-import { InputText } from './InputText'
+import { InputText } from './components/InputText'
 import Form, { FieldConfigs, FormProps } from './Form'
 import {
   FakeForm,
