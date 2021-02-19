@@ -1,5 +1,5 @@
 import React from 'react'
-import { ErrorMessage, getLabelText } from '../utils'
+import Field from './Field'
 
 export interface InputTextProps {
   name: string
@@ -13,7 +13,6 @@ export interface InputTextProps {
   className?: string
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const InputText = (props: InputTextProps) => {
   const {
     name,
@@ -23,12 +22,16 @@ export const InputText = (props: InputTextProps) => {
     value,
     required,
     error,
-    disabled,
-    className
+    disabled
   } = props
   return (
-    <div className={className}>
-      <label htmlFor={name}>{getLabelText(label, required)}</label>
+    <Field
+      label={label}
+      name={name}
+      required={required}
+      error={error}
+      disabled={disabled}
+    >
       <input
         data-testid={`input-${name}`}
         id={name}
@@ -37,7 +40,6 @@ export const InputText = (props: InputTextProps) => {
         value={value}
         disabled={disabled}
       />
-      <ErrorMessage error={error} />
-    </div>
+    </Field>
   )
 }

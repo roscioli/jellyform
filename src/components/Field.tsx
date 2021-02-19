@@ -1,27 +1,31 @@
 import React from 'react'
+import { ErrorMessage, getCssClassName, getLabelText } from '../utils'
 
 interface IProps {
   label: string
-  htmlFor: string
-  className?: string
-  required?: boolean
-  customStyles?: React.CSSProperties
+  name: string
+  required: boolean | undefined
+  error: string | undefined
+  disabled: boolean | undefined
 }
 
+const FORM_FIELD_CLASS = getCssClassName('form-field')
+const DISABLED_FORM_FIELD_CLASS =
+  FORM_FIELD_CLASS + ' ' + getCssClassName('form-field-disabled')
+
 export const Field: React.FC<IProps> = ({
-  className,
   label,
-  children,
-  htmlFor,
+  children: inputElement,
+  name,
   required,
-  customStyles
+  error,
+  disabled
 }) => {
   return (
-    <div className={className} style={customStyles}>
-      <label htmlFor={htmlFor} className={required ? 'required *' : ''}>
-        {label}
-      </label>
-      {children}
+    <div className={disabled ? DISABLED_FORM_FIELD_CLASS : FORM_FIELD_CLASS}>
+      <label htmlFor={name}>{getLabelText(label, required)}</label>
+      {inputElement}
+      <ErrorMessage error={error} />
     </div>
   )
 }

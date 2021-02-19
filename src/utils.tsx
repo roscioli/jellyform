@@ -39,10 +39,6 @@ export function stubObject() {
   return {}
 }
 
-export function getCssClassName(
-  className: string,
-  { disabled }: { disabled?: boolean } = {}
-) {
-  const disabledClass = disabled ? 'jf-form-field-disabled' : ''
-  return `jf-${className} ${styles[className]} ${disabledClass}`
+export function getCssClassName(className: string) {
+  return `jf-${className} ${styles[className] || ''}`
 }

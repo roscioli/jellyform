@@ -1,7 +1,6 @@
 import React from 'react'
 import Select, { ValueType } from 'react-select'
 import Field from './Field'
-import { ErrorMessage, getDisabledClass } from '../utils'
 
 export interface InputSelectProps {
   error?: string
@@ -20,33 +19,6 @@ export interface InputSelectProps {
   label: string
 }
 
-interface FormFieldProps {
-  name: string
-  label: string
-  children?: React.ReactNode
-  required?: boolean
-  error?: string
-  disabled?: boolean
-}
-
-const FormField = ({
-  name,
-  label,
-  children,
-  required,
-  // error,
-  disabled
-}: FormFieldProps) => (
-  <Field
-    className={getDisabledClass(disabled)}
-    label={label}
-    htmlFor={name}
-    required={required}
-  >
-    {children}
-  </Field>
-)
-
 type SelectChangeValue = ValueType<any, any> | null | undefined
 
 const DropdownIndicator = () => {
@@ -62,15 +34,15 @@ const DropdownIndicator = () => {
   )
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const InputSelect = (props: InputSelectProps) => {
-  const { name, required, error, disabled, label, ...rest } = props
+  const { label, name, required, disabled, error, ...rest } = props
   return (
-    <FormField
+    <Field
       label={label}
       name={name}
       required={required}
       disabled={disabled}
+      error={error}
     >
       <Select
         id={name}
@@ -79,20 +51,19 @@ export const InputSelect = (props: InputSelectProps) => {
         {...rest}
         components={{ DropdownIndicator }}
       />
-      <ErrorMessage error={error} />
-    </FormField>
+    </Field>
   )
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export const MultiSelect = (props: InputSelectProps) => {
   const { name, required, error, disabled, label, ...rest } = props
   return (
-    <FormField
+    <Field
       label={label}
       name={name}
       required={required}
       disabled={disabled}
+      error={error}
     >
       <Select
         isMulti
@@ -102,7 +73,6 @@ export const MultiSelect = (props: InputSelectProps) => {
         {...rest}
         components={{ DropdownIndicator }}
       />
-      <ErrorMessage error={error} />
-    </FormField>
+    </Field>
   )
 }

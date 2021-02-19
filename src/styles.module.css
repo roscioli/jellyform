@@ -4,3 +4,13 @@
   display: flex;
   flex-direction: row;
 }
+
+.form-row > div:not(:last-child) {
+  padding-right: 30px;
+}
+
+.form-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
