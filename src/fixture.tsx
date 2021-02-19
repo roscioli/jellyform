@@ -66,7 +66,7 @@ export const getFormProps = (): FormProps<
           getOptionWithDifferentLabel('sel1 val1', 'this is fine'),
           getOptionWithDifferentLabel('sel1 val2', 'this is fine too')
         ],
-        required: true
+        required: false
       }
     },
     catchall: {
