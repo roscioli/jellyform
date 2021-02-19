@@ -141,7 +141,6 @@ export default function Form<
 
   useEffect(() => {
     if (!Object.keys(allProps).length) return
-    const _disabledKeys: Set<keyof FormValues> = new Set()
     const els = layout.map((row, i) => (
       <div key={`row-${i}`} className='form-row'>
         {row.map((key: keyof FormValues) => {
@@ -162,15 +161,12 @@ export default function Form<
             ...allProps[key]
           }
 
-          if ('disabled' in props && props.disabled) _disabledKeys.add(key)
-
           return <Component key={key} {...props} />
         })}
       </div>
     ))
 
     setFormEls(els)
-    setDisabledKeys(_disabledKeys)
   }, [layout, errors, setFormFields, formValues, allProps])
 
   return (
