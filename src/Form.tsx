@@ -79,7 +79,6 @@ export default function Form<
     },
     [formValues, setForm]
   )
-  const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
   const [errors, setErrors] = useState<
     PartialRecordOfFormValues<FormValues, string>
   >({})
@@ -89,6 +88,12 @@ export default function Form<
   const [disabledKeys, setDisabledKeys] = useState<Set<keyof FormValues>>(
     new Set()
   )
+  const [allProps, setAllProps] = useState<
+    PartialRecordOfFormValues<
+      FormValues,
+      StaticProps & Partial<PossibleComponentProps>
+    >
+  >({})
 
   const disabled = useMemo(
     () =>
@@ -97,44 +102,50 @@ export default function Form<
   )
 
   useEffect(() => {
-    setIsFormComplete(
-      Object.entries(fieldConfigs).every(([key, config]) => {
-        if (!config.generateProps) return true
-        if (!config.generateProps(propGeneratorOptions).required) return true
-        return isValueDefined(formValues[key])
+    const _errors: PartialRecordOfFormValues<FormValues, string> = {}
+    const _allProps: PartialRecordOfFormValues<
+      FormValues,
+      StaticProps & Partial<PossibleComponentProps>
+    > = {}
+    const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
+    const _disabledKeys: Set<keyof FormValues> = new Set()
+    let _isFormComplete = true
+
+    for (const [
+      fieldKey,
+      { generateProps, staticProps, getError }
+    ] of Object.entries(fieldConfigs)) {
+      const value = formValues[fieldKey]
+      const generatedProps =
+        generateProps && generateProps(propGeneratorOptions)
+
+      const props = Object.assign(generatedProps || {}, staticProps)
+
+      Object.assign(_errors, {
+        [fieldKey]:
+          value && getError && !props.disabled ? getError(formValues) : null
       })
-    )
-  }, [formValues, propGeneratorOptions, fieldConfigs])
+
+      Object.assign(_allProps, { [fieldKey]: props })
+
+      if (props.disabled) _disabledKeys.add(fieldKey)
+
+      if (props.required && !isValueDefined(value)) _isFormComplete = false
+    }
+
+    setIsFormComplete(_isFormComplete)
+    setErrors(_errors)
+    setAllProps(_allProps)
+    setDisabledKeys(_disabledKeys)
+  }, [formValues, fieldConfigs, setFormFields])
 
   useEffect(() => {
-    setErrors(
-      Object.entries(fieldConfigs).reduce(
-        (acc, [key, { getError, generateProps }]) => {
-          const value = formValues[key]
-          const ps = generateProps && generateProps(propGeneratorOptions)
-          const disabled = ps && ps.disabled
-          Object.assign(acc, {
-            [key]: value && getError && !disabled ? getError(formValues) : null
-          })
-          return acc
-        },
-        {} as PartialRecordOfFormValues<FormValues, string>
-      )
-    )
-  }, [fieldConfigs, formValues])
-
-  useEffect(() => {
+    if (!Object.keys(allProps).length) return
     const _disabledKeys: Set<keyof FormValues> = new Set()
     const els = layout.map((row, i) => (
       <div key={`row-${i}`} className='form-row'>
         {row.map((key: keyof FormValues) => {
-          const {
-            Component,
-            generateProps = stubObject,
-            staticProps
-          } = fieldConfigs[key as string]
-
-          const generatedProps = generateProps(propGeneratorOptions)
+          const { Component } = fieldConfigs[key as string]
 
           const props: GeneratedProps = {
             'data-testid': `input-${key}`,
@@ -148,8 +159,7 @@ export default function Form<
               } as PartialRecordOfFormValues<FormValues>)
             },
             error: errors[key],
-            ...staticProps,
-            ...generatedProps
+            ...allProps[key]
           }
 
           if ('disabled' in props && props.disabled) _disabledKeys.add(key)
@@ -161,7 +171,7 @@ export default function Form<
 
     setFormEls(els)
     setDisabledKeys(_disabledKeys)
-  }, [layout, errors, setFormFields, formValues])
+  }, [layout, errors, setFormFields, formValues, allProps])
 
   return (
     <div>
