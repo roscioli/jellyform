@@ -30,8 +30,8 @@ export const getFormProps = (): FormProps<
   {},
   InputComponentProps
 > => ({
-  submitForm: () => Promise.resolve(),
-  setForm: () => Promise.resolve(),
+  onFormSubmit: () => Promise.resolve(),
+  onFormChange: () => Promise.resolve(),
   formValues: getFormInitialState(),
   fieldConfigs: {
     num1: {

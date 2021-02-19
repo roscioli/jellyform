@@ -43,14 +43,14 @@ export type FormProps<
 > = {
   propGeneratorOptions?: PropGeneratorOptions
   formValues: FormValues
-  setForm: (state: FormValues) => void
+  onFormChange: (state: FormValues) => void
   fieldConfigs: FieldConfigs<
     FormValues,
     PropGeneratorOptions,
     PossibleComponentProps
   >
   layout: (keyof FormValues)[][]
-  submitForm: (submission: Partial<FormValues>) => Promise<any>
+  onFormSubmit: (submission: Partial<FormValues>) => Promise<any>
   submitButtonText?: string
 }
 
@@ -66,17 +66,17 @@ export function Jellyform<
 >({
   propGeneratorOptions: _propGenOpts = {} as PropGeneratorOptions,
   formValues,
-  setForm,
+  onFormChange,
   fieldConfigs,
   layout,
-  submitForm,
+  onFormSubmit,
   submitButtonText
 }: FormProps<FormValues, PropGeneratorOptions, PossibleComponentProps>) {
   const setFormFields = useCallback(
     (fields: PartialRecordOfFormValues<FormValues>) => {
-      setForm({ ...formValues, ...fields })
+      onFormChange({ ...formValues, ...fields })
     },
-    [formValues, setForm]
+    [formValues, onFormChange]
   )
   const [errors, setErrors] = useState<
     PartialRecordOfFormValues<FormValues, string>
@@ -180,7 +180,7 @@ export function Jellyform<
             (acc, [k, v]) => (disabledKeys.has(k) ? acc : { ...acc, [k]: v }),
             {}
           )
-          await submitForm(formWithoutDisabledKeys)
+          await onFormSubmit(formWithoutDisabledKeys)
           setIsSubmitting(false)
         }}
       >

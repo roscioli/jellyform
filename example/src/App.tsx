@@ -7,7 +7,7 @@ const App = () => {
   const initialProps = useMemo(() => _fixture.getFormProps(), [])
   const [formValues, setFormValues] = useState(_fixture.getFormInitialState())
 
-  return <Jellyform<_FakeForm, {}, _InputComponentProps> {...initialProps} formValues={formValues} setForm={setFormValues} />
+  return <Jellyform<_FakeForm, {}, _InputComponentProps> {...initialProps} formValues={formValues} onFormChange={setFormValues} />
 }
 
 export default App

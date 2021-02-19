@@ -22,8 +22,8 @@ console.error = (s: string, ...args: any) => {
 }
 
 export const getBaseFormProps = () => ({
-  submitForm: jest.fn(),
-  setForm: jest.fn()
+  onFormSubmit: jest.fn(),
+  onFormChange: jest.fn()
 })
 
 const renderWithProps = (
@@ -117,16 +117,16 @@ describe('errors', () => {
 
 describe('submission', () => {
   it('submits form', () => {
-    const submitForm = jest.fn(() => Promise.resolve())
-    const { getByTestId } = renderWithProps({ submitForm })
+    const onFormSubmit = jest.fn(() => Promise.resolve())
+    const { getByTestId } = renderWithProps({ onFormSubmit })
     fireEvent.click(getByTestId('submitButton'))
-    expect(submitForm).toHaveBeenCalledWith(getFormInitialState())
+    expect(onFormSubmit).toHaveBeenCalledWith(getFormInitialState())
   })
 
   it('disables input if disabled results in true', () => {
-    const submitForm = jest.fn(() => Promise.resolve())
+    const onFormSubmit = jest.fn(() => Promise.resolve())
     const { getByTestId } = renderWithProps({
-      submitForm,
+      onFormSubmit,
       formValues: getFormInitialState({ num2: 0 })
     })
     const el = getByTestId('input-str2') as HTMLInputElement
@@ -134,7 +134,7 @@ describe('submission', () => {
   })
 
   it('submits form omitting disabled inputs', () => {
-    const submitForm = jest.fn(() => Promise.resolve())
+    const onFormSubmit = jest.fn(() => Promise.resolve())
     const initialFormValues: FakeForm = {
       num1: 1,
       str1: '1',
@@ -144,12 +144,12 @@ describe('submission', () => {
     }
     expect(initialFormValues.str2).toEqual('2')
     const { getByTestId } = renderWithProps({
-      submitForm,
+      onFormSubmit,
       formValues: initialFormValues
     })
     fireEvent.click(getByTestId('submitButton'))
     const { str2, ...submission } = initialFormValues
-    expect(submitForm).toHaveBeenCalledWith(submission)
+    expect(onFormSubmit).toHaveBeenCalledWith(submission)
   })
 
   it('disables button on submit', () => {
@@ -161,8 +161,8 @@ describe('submission', () => {
   })
 
   it('reenables button on submit complete', async () => {
-    const submitForm = () => new Promise((resolve) => setTimeout(resolve, 1))
-    const { getByTestId } = renderWithProps({ submitForm })
+    const onFormSubmit = () => new Promise((resolve) => setTimeout(resolve, 1))
+    const { getByTestId } = renderWithProps({ onFormSubmit })
     fireEvent.click(getByTestId('submitButton'))
 
     await wait(() => {
