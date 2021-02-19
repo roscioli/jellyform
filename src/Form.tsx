@@ -146,7 +146,7 @@ export function Jellyform<
   useEffect(() => {
     if (!Object.keys(allProps).length) return
     const els = layout.map((row, i) => (
-      <div key={`row-${i}`} className={getCssClassName('form-row')}>
+      <div key={`row-${i}`} className={getCssClassName('formRow')}>
         {row.map((key: keyof FormValues) => {
           const { Component } = fieldConfigs[key as string]
 

@@ -9,11 +9,11 @@ export type FieldProps = {
   disabled: boolean | undefined
 }
 
-const FORM_FIELD_CLASS = getCssClassName('form-field')
+const FORM_FIELD_CLASS = getCssClassName('fieldBlock')
 const DISABLED_FORM_FIELD_CLASS =
-  FORM_FIELD_CLASS + ' ' + getCssClassName('form-field-disabled')
+  FORM_FIELD_CLASS + ' ' + getCssClassName('fieldBlock-disabled')
 const ERROR_FORM_FIELD_CLASS =
-  FORM_FIELD_CLASS + ' ' + getCssClassName('form-field-error')
+  FORM_FIELD_CLASS + ' ' + getCssClassName('fieldBlock-error')
 
 export const Field: React.FC<FieldProps> = ({
   label,

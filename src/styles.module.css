@@ -1,24 +1,22 @@
-/* add css module styles here (optional) */
-
-.form-row {
+.formRow {
   display: flex;
   flex-direction: row;
 }
 
-.form-row > div:not(:last-child) {
+.formRow > div:not(:last-child) {
   padding-right: 30px;
 }
 
-.form-field {
+.fieldBlock {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-.form-field-errorText {
+.fieldBlock-errorText {
   color: rgb(223, 86, 87);
 }
 
-.form-field-asterisk {
+.fieldBlock-asterisk {
   color: rgb(223, 86, 87);
 }

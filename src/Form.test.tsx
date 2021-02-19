@@ -198,7 +198,7 @@ describe('rendering', () => {
 
   it('renders rows using layout', () => {
     const { container } = renderWithProps({})
-    const rows = container.getElementsByClassName('form-row')
+    const rows = container.getElementsByClassName('formRow')
     expect(rows.length).toEqual(3)
     const labelEls = Array.from(rows).map((row) =>
       Array.from(row.getElementsByTagName('label')).map((el) => el.innerHTML)

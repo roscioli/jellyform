@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import styles from './styles.module.css'
 
 export const ErrorMessage = ({ error }: { error?: string }) => (
-  <div className={getCssClassName('form-field-errorText')}>
+  <div className={getCssClassName('fieldBlock-errorText')}>
     {error ? <span>{error}</span> : null}
   </div>
 )
@@ -11,7 +11,7 @@ export const getLabelText = (label: string, required?: boolean) => (
   <Fragment>
     {label}
     {required ? (
-      <span className={getCssClassName('form-field-asterisk')}> *</span>
+      <span className={getCssClassName('fieldBlock-asterisk')}> *</span>
     ) : null}
   </Fragment>
 )
