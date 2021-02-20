@@ -53,6 +53,14 @@ export const InputSelect = (props: InputSelectProps) => {
         name={name}
         isDisabled={disabled}
         {...rest}
+        styles={{
+          control: (p) => ({
+            ...p,
+            backgroundColor: '#e7ebed',
+            border: 'none'
+          }),
+          indicatorSeparator: (p) => ({ ...p, display: 'none' })
+        }}
         components={{ DropdownIndicator }}
       />
     </FieldBlock>

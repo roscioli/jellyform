@@ -8,8 +8,6 @@ import {
   getFormProps,
   InputComponentProps
 } from './fixture'
-import { InputSelectProps } from './components/InputSelect'
-import { InputSelect } from '.'
 import { getEmptyOption } from './utils'
 
 const originalError = console.error
