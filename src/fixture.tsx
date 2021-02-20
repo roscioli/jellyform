@@ -52,7 +52,7 @@ export const getFormProps = (): FormProps<
         disabled: f.str2 === 'this will trigger str1 to error'
       })
     },
-    num2: { Component: InputText },
+    num2: { Component: InputText, staticProps: { type: 'number' } },
     str2: {
       Component: InputText,
       generateProps: ({ formValues: f }) => ({ disabled: !f.num2 })
