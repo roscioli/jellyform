@@ -78,6 +78,16 @@ describe('incomplete state', () => {
     )
   })
 
+  it('does not disable submission if value is empty but layout does not have value', () => {
+    const { getByTestId } = renderWithProps({
+      formValues: { ...getFormInitialState(), catchall: [] },
+      layout: [['num1', 'str1'], ['num2', 'str2'], ['sel1']]
+    })
+    expect((getByTestId('submitButton') as HTMLButtonElement).disabled).toEqual(
+      false
+    )
+  })
+
   it('disables submission when form has a null value', () => {
     const { getByTestId } = renderWithProps({
       formValues: { ...getFormInitialState(), catchall: null },
