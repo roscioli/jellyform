@@ -12,7 +12,7 @@ export type FakeForm = {
   str1?: string
   num2?: number
   str2?: string
-  sel1?: InputSelectOption<number, string>
+  sel1?: InputSelectOption<number, string> | InputSelectOption
   catchall?: number[] | null
 }
 

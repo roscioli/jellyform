@@ -8,6 +8,9 @@ import {
   getFormProps,
   InputComponentProps
 } from './fixture'
+import { InputSelectProps } from './components/InputSelect'
+import { InputSelect } from '.'
+import { getEmptyOption } from './utils'
 
 const originalError = console.error
 
@@ -329,5 +332,23 @@ describe('field changes', () => {
     const inputEl = getByTestId('input-num1') as HTMLInputElement
     fireEvent.change(inputEl, { target: { value: 999 } })
     expect(inputEl.value).toEqual('999')
+  })
+})
+
+describe('when actual value is not the value prop', () => {
+  it('uses actual value to check for form completion if `getActualValue` is provided', () => {
+    const formValues = getFormInitialState({ sel1: getEmptyOption() })
+    const props = getFormProps()
+
+    if (props.fieldConfigs.sel1.staticProps)
+      props.fieldConfigs.sel1.staticProps.required = true
+
+    const { getByTestId } = renderWithProps({
+      ...props,
+      formValues
+    })
+
+    const buttonEl = getByTestId('submitButton') as HTMLButtonElement
+    expect(buttonEl.disabled).toEqual(true)
   })
 })
