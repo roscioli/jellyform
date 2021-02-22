@@ -51,25 +51,25 @@ const App = () => {
 
 ## Props
 
-### formValues
+### formValues *
 
 `object`
 
 This is a simple key/value object that define the form's initial state.
 
-### layout
+### layout *
 
 `string[][]`
 
 This is an array of string arrays that defines the layout of the form. The strings are the keys of `formValues`.
 
-### fieldConfigs
+### fieldConfigs *
 
 `object`
 
 This is an object that contains the behaviour definitions for all fields. Each key is associated with a [`FieldConfig`](#fieldconfig) object with the following properties.
 
-### onFormSubmit
+### onFormSubmit *
 
 `Function`
 
@@ -97,7 +97,7 @@ This defines the submit button text.
 
 ## FieldConfig
 
-### Component
+### Component *
 
 `React Component`
 
