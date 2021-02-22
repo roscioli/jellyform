@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Building forms should involve simply defining how the field behaves. This package aims to create a simple, declarative, lightweight, and performative React form solution.
+Building forms should involve simply defining how each field behaves. This package aims to create a simple, declarative, lightweight, and performative React form solution.
 
 ## Install
 
