@@ -1,18 +1,28 @@
 # jellyform
 
-> Simple, declarative, lightweight React form
+> Simple, declarative, lightweight React form built with performance in mind.
 
 [![NPM](https://img.shields.io/npm/v/jellyform.svg)](https://www.npmjs.com/package/jellyform) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Motivation
 
-Building forms should involve simply defining how each field behaves. This package aims to create a simple, declarative, lightweight React form solution built with performance in mind.
+Building forms should involve simply defining how each field behaves. This package aims to create a simple, declarative, lightweight React form built with performance in mind.
+
+Plug and play your own **_custom input components_**. No more copying and pasting boilerplate. No more large forms with confusing, nested components.
+
+**_Simply define each field's behaviour_** and jellyform will generate the form element and render it all for you in a simple, beautiful, and extensible way.
+
+**_Fully typed components_** will allow your IDE to pick up any errors as well as autocomplete for you.
+
+***
 
 ## Install
 
 ```bash
 npm install --save jellyform
 ```
+
+***
 
 ## Usage
 
@@ -48,6 +58,8 @@ const App = () => {
   )
 }
 ```
+
+***
 
 ## Props
 
@@ -95,7 +107,11 @@ This is a function that executes every time a form value is changed. The functio
 
 This defines the submit button text.
 
+***
+
 ## FieldConfig
+
+This type is used to define the configuration of each field using the [fieldConfigs](#fieldconfigs) prop.
 
 ### Component *
 
@@ -147,11 +163,15 @@ You can override this identity function with a custom function if necessary.
 >
 > In this scenario, `getActualValue` needs to be `x => x.value`
 
+***
+
 ## Input components
 
 Jellyform offers `InputText` and `InputSelect` out of the box, however, you can use your own custom input components as well.
 
 If you want to use a custom input component, you can simply pass it to `Component` in the field config. To have your component wrapped with a label and error message feedback, you can use the `wrapCustomInputComponent` function. [See it in use](src/components/InputText.tsx) with Jellyform's `InputText` component.
+
+***
 
 ## Typescript
 
@@ -160,7 +180,12 @@ Jellyform is built with typescript. When instantiating Jellyform you can specify
 Fully typing everything is recommended as your IDE can then autofill a lot for you.
 
 ```tsx
-<Jellyform<FormValues, PropGeneratorOptions, PossibleComponentProps> {...props}/>
+<Jellyform<
+  FormValues,
+  PropGeneratorOptions,
+  PossibleComponentProps>
+  {...props}
+/>
 ```
 
 ### FormValues
@@ -178,6 +203,8 @@ This is a type that defines all possible input components (`or`'d together). For
 ```ts
 type PossibleComponentProps = InputTextProps | InputSelectProps
 ```
+
+***
 
 ## License
 
