@@ -129,6 +129,32 @@ Jellyform offers `InputText` and `InputSelect` out of the box, however, you can 
 
 If you want to use a custom input component, you can simply pass it to `Component` in the field config. To have your component wrapped with a label and error message feedback, you can use the `wrapCustomInputComponent` function. [See it in use](src/components/InputText.tsx) with Jellyform's `InputText` component.
 
+## Typescript
+
+Jellyform is built with typescript. When instantiating Jellyform you can specify three generics.
+
+Fully typing everything is recommended as your IDE can then autofill a lot for you.
+
+```tsx
+<Jellyform<FormValues, PropGeneratorOptions, PossibleComponentProps> {...props}/>
+```
+
+### FormValues
+
+This is a simple object type defining the key/values of your form.
+
+### PropGeneratorOptions
+
+This is another simple object tpe defining the key/values of the object, [`propGeneratorOptions`](#propgeneratoroptions-object), that is passed into `generateProps`.
+
+### PossibleComponentProps
+
+This is a type that defines all possible input components (`or`'d together). For example we can have:
+
+```ts
+type PossibleComponentProps = InputTextProps | InputSelectProps
+```
+
 ## License
 
 MIT © [Octavio Roscioli](https://github.com/roscioli)
