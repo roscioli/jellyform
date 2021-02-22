@@ -9,8 +9,6 @@ type StaticProps = {
   disabled?: boolean
 }
 
-type GeneratedProps = StaticProps & StringKeyObject
-
 type PartialRecordOfFormValues<
   T extends StringKeyObject,
   V = T[keyof T]
