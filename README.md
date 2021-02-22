@@ -51,47 +51,67 @@ const App = () => {
 
 ## Props
 
-### formValues (`object`)
+### formValues
+
+`object`
 
 This is a simple key/value object that define the form's initial state.
 
-### layout (`string[][]`)
+### layout
+
+`string[][]`
 
 This is an array of string arrays that defines the layout of the form. The strings are the keys of `formValues`.
 
-### fieldConfigs (`object`)
+### fieldConfigs
+
+`object`
 
 This is an object that contains the behaviour definitions for all fields. Each key is associated with a [`FieldConfig`](#fieldconfig) object with the following properties.
 
-### onFormSubmit (`Function`)
+### onFormSubmit
+
+`Function`
 
 This is a function that will get executed on form submit. It may be async or synchronous. The function takes the current `formValues` object as its only parameter.
 
-### propGeneratorOptions (`object`)
+### propGeneratorOptions
+
+`object`
 
 When generating props for a field using [`generateProps`](#generateprops-function), you may need dynamic values from your app to be passed into the form to generate the correct props. An example of this is creating dynamic options asynchronously for a select component.
 
 To pass in application state into the form dynamically, you can define the `propGeneratorOptions` object so your field configs can access this state to generate input field props in the `generateProps` function.
 
-### onFormChange (`Function`)
+### onFormChange
+
+`Function`
 
 This is a function that executes every time a form value is changed. The function takes the current `formValues` object as its only parameter.
 
-### submitButtonText (`string`)
+### submitButtonText
+
+`string`
 
 This defines the submit button text.
 
 ## FieldConfig
 
-### Component (React Component)
+### Component
+
+`React Component`
 
 This is the React input component for this field.
 
-### staticProps (`object`)
+### staticProps
+
+`object`
 
 These are static props that will always get passed into `Component`.
 
-### generateProps (`Function`)
+### generateProps
+
+`Function`
 
 This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formvalues-object), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propgeneratoroptions-object).
 
@@ -105,11 +125,15 @@ setFormValues({b: 1, c: 2})
 // now formValues is {a: 0, b: 1, c: 2}
 ```
 
-### getError (`Function`)
+### getError
+
+`Function`
 
 This is a function that takes the `formValues` as a parameter. It should return a error string if the field has an error and `null` if it does not.
 
-### getActualValue (`Function`)
+### getActualValue
+
+`Function`
 
 Jellyform toggles the disabled state of the form's submit button based on the existence of the value and if the value has an error or not. Jellyform, by default, uses an identity function `x => x` to get the value of the form's field to check if it is unpopulated or erroneous.
 
