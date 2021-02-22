@@ -57,7 +57,7 @@ This is a simple key/value object that define the form's initial state.
 
 ### `layout` (`string[][]`)
 
-This is an array of string arrays that define the layout of the form. The strings are the keys of `formValues`.
+This is an array of string arrays that defines the layout of the form. The strings are the keys of `formValues`.
 
 ### `fieldConfigs` (`object`)
 
@@ -75,7 +75,7 @@ These are static props that will always get passed into `Component`.
 
 ##### `generateProps` (`Function`)
 
-This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formValues), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propGeneratorOptions).
+This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formvalues-object), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propgeneratoroptions-object).
 
 Sometimes an update to one field can trigger an update on another field. `setFormValues` is a function that takes an object to override the current `formValues`.
 
@@ -93,7 +93,7 @@ This is a function that will get executed on form submit. It may be async or syn
 
 ### `propGeneratorOptions` (`object`)
 
-When generating props for a field using [`generateProps`](#generateProps), you may need dynamic values from your app to be passed into the form to generate the correct props. An example of this is creating dynamic options asynchronously for a select component.
+When generating props for a field using [`generateProps`](#generateprops-function), you may need dynamic values from your app to be passed into the form to generate the correct props. An example of this is creating dynamic options asynchronously for a select component.
 
 To pass in application state into the form dynamically, you can define the `propGeneratorOptions` object so your field configs can access this state to generate input field props in the `generateProps` function.
 
