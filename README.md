@@ -127,7 +127,7 @@ You can override this identity function with a custom function if necessary.
 
 Jellyform offers `InputText` and `InputSelect` out of the box, however, you can use your own custom input components as well.
 
-If you want to use a custom input component, you can simply pass it to `Component` in the field config. To have your component wrapped with a label and error message feedback, you can use the `wrapCustomInputComponent` function. [See it in use](src/components/InputText.tsx) with Jellyform's InputText component.
+If you want to use a custom input component, you can simply pass it to `Component` in the field config. To have your component wrapped with a label and error message feedback, you can use the `wrapCustomInputComponent` function. [See it in use](src/components/InputText.tsx) with Jellyform's `InputText` component.
 
 ## License
 
