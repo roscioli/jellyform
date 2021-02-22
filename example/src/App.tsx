@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react'
 
-import Jellyform, {_FakeForm, _InputComponentProps, _fixture} from 'jellyform'
+import Jellyform, {__FakeForm, __InputComponentProps, __fixture} from 'jellyform'
 import 'jellyform/dist/index.css'
 
 const App = () => {
-  const initialProps = useMemo(() => _fixture.getFormProps(), [])
+  const initialProps = useMemo(() => __fixture.getFormProps(), [])
 
   return (
     <div style={{width: '800px', margin: '100px auto'}}>
-      <Jellyform<_FakeForm, {}, _InputComponentProps>
+      <Jellyform<__FakeForm, {}, __InputComponentProps>
       {...initialProps}
       onFormSubmit={(f) => {
         console.log(f)

@@ -13,10 +13,10 @@ export type { InputTextProps } from './components/InputText'
 export * as utils from './utils'
 export type { InputSelectOption } from './utils'
 
-export * as _fixture from './fixture'
+export * as __fixture from './fixture'
 export type {
-  FakeForm as _FakeForm,
-  InputComponentProps as _InputComponentProps
+  FakeForm as __FakeForm,
+  InputComponentProps as __InputComponentProps
 } from './fixture'
 
 const Jellyform = FormImports.Jellyform
