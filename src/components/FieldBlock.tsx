@@ -51,9 +51,13 @@ export const FieldBlock: React.FC<FieldBlockProps> = ({
 }
 
 export function wrapCustomInputComponent<T extends FieldBlockProps>(
-  inputComponent: React.FC<T>
+  InputComponent: React.FC<T>
 ) {
-  return (props: T) => <FieldBlock {...props}>{inputComponent}</FieldBlock>
+  return (props: T) => (
+    <FieldBlock {...props}>
+      <InputComponent {...props} />
+    </FieldBlock>
+  )
 }
 
 export default FieldBlock
