@@ -61,49 +61,7 @@ This is an array of string arrays that defines the layout of the form. The strin
 
 ### `fieldConfigs` (`object`)
 
-This is an object that contains the behaviour definitions for all fields. Each key is associated with a `FieldConfig` object with the following properties.
-
-#### type `FieldConfig`
-
-##### `Component` (React Component)
-
-This prop is your React input component for this field.
-
-##### `staticProps` (`object`)
-
-These are static props that will always get passed into `Component`.
-
-##### `generateProps` (`Function`)
-
-This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formvalues-object), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propgeneratoroptions-object).
-
-Sometimes an update to one field can trigger an update on another field. `setFormValues` is a function that takes an object to override the current `formValues`.
-
-```js
-// say formValues is {a: 0, b: 0, c: 0}
-
-setFormValues({b: 1, c: 2})
-
-// now formValues is {a: 0, b: 1, c: 2}
-```
-
-##### getError
-
-This is a function that takes the `formValues` as a parameter. It should return a error string if the field has an error and `null` if it does not.
-
-##### getActualValue
-
-Jellyform toggles the disabled state of the form's submit button based on the existence of the value and if the value has an error or not. Jellyform, by default, uses an identity function `x => x` to get the value of the form's field to check if it is unpopulated or erroneous.
-
-You can override this identity function with a custom function if necessary.
-
-> *When is this relevant?*
->
->Some component libraries, like `react-select`, have input components that take a `value` prop but the value that is actually selected is different 🙄
->
-> For example, you might have `<Select value={{value: 1, label: 'one'}} />`. As you can see, `value` is actually an object that contains the actual value.
->
-> In this scenario, `getActualValue` needs to be `x => x.value`
+This is an object that contains the behaviour definitions for all fields. Each key is associated with a [`FieldConfig`](#fieldconfig) object with the following properties.
 
 ### `onFormSubmit` (`Function`)
 
@@ -122,6 +80,48 @@ This is a function that executes every time a form value is changed. The functio
 ### `submitButtonText` (`string`)
 
 This defines the submit button text.
+
+## `FieldConfig`
+
+### `Component` (React Component)
+
+This prop is your React input component for this field.
+
+### `staticProps` (`object`)
+
+These are static props that will always get passed into `Component`.
+
+### `generateProps` (`Function`)
+
+This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formvalues-object), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propgeneratoroptions-object).
+
+Sometimes an update to one field can trigger an update on another field. `setFormValues` is a function that takes an object to override the current `formValues`.
+
+```js
+// say formValues is {a: 0, b: 0, c: 0}
+
+setFormValues({b: 1, c: 2})
+
+// now formValues is {a: 0, b: 1, c: 2}
+```
+
+### getError
+
+This is a function that takes the `formValues` as a parameter. It should return a error string if the field has an error and `null` if it does not.
+
+### getActualValue
+
+Jellyform toggles the disabled state of the form's submit button based on the existence of the value and if the value has an error or not. Jellyform, by default, uses an identity function `x => x` to get the value of the form's field to check if it is unpopulated or erroneous.
+
+You can override this identity function with a custom function if necessary.
+
+> *When is this relevant?*
+>
+>Some component libraries, like `react-select`, have input components that take a `value` prop but the value that is actually selected is different 🙄
+>
+> For example, you might have `<Select value={{value: 1, label: 'one'}} />`. As you can see, `value` is actually an object that contains the actual value.
+>
+> In this scenario, `getActualValue` needs to be `x => x.value`
 
 ## Input components
 
