@@ -6,7 +6,7 @@
 
 ## Motivation
 
-Building forms should involve simply defining how each field behaves. This package aims to create a simple, declarative, lightweight, and performative React form solution.
+Building forms should involve simply defining how each field behaves. This package aims to create a simple, declarative, lightweight React form solution built with performance in mind.
 
 ## Install
 
@@ -87,6 +87,24 @@ setFormValues({b: 1, c: 2})
 // now formValues is {a: 0, b: 1, c: 2}
 ```
 
+##### getError
+
+This is a function that takes the `formValues` as a parameter. It should return a error string if the field has an error and `null` if it does not.
+
+##### getActualValue
+
+Jellyform toggles the disabled state of the form's submit button based on the existence of the value and if the value has an error or not. Jellyform, by default, uses an identity function `x => x` to get the value of the form's field to check if it is unpopulated or erroneous.
+
+You can override this identity function with a custom function if necessary.
+
+> *When is this relevant?*
+>
+>Some component libraries, like `react-select`, have input components that take a `value` prop but the value that is actually selected is different 🙄
+>
+> For example, you might have `<Select value={{value: 1, label: 'one'}} />`. As you can see, `value` is actually an object that contains the actual value.
+>
+> In this scenario, `getActualValue` needs to be `x => x.value`
+
 ### `onFormSubmit` (`Function`)
 
 This is a function that will get executed on form submit. It may be async or synchronous. The function takes the current `formValues` object as its only parameter.
@@ -104,6 +122,8 @@ This is a function that executes every time a form value is changed. The functio
 ### `submitButtonText` (`string`)
 
 This defines the submit button text.
+
+## Custom input components
 
 ## License
 
