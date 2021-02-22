@@ -16,7 +16,7 @@ type PartialRecordOfFormValues<
 
 type FieldConfig<FormValues, PropGeneratorOptions, PossibleComponentProps> = {
   Component: React.FC<any>
-  staticProps?: StaticProps & Partial<PossibleComponentProps>
+  staticProps?: StringKeyObject & StaticProps & Partial<PossibleComponentProps>
   generateProps?: (
     options: PropGeneratorOptions & {
       formValues: FormValues
@@ -41,16 +41,16 @@ export type FormProps<
   PropGeneratorOptions extends object = {},
   PossibleComponentProps extends object = {}
 > = {
-  propGeneratorOptions?: PropGeneratorOptions
-  formValues: FormValues
-  onFormChange: (state: FormValues) => void
   fieldConfigs: FieldConfigs<
     FormValues,
     PropGeneratorOptions,
     PossibleComponentProps
   >
+  formValues: FormValues
   layout: (keyof FormValues)[][]
-  onFormSubmit: (submission: Partial<FormValues>) => Promise<any>
+  onFormSubmit: (submission: Partial<FormValues>) => void | Promise<void>
+  propGeneratorOptions?: PropGeneratorOptions
+  onFormChange?: (state: FormValues) => void
   submitButtonText?: string
 }
 
@@ -80,7 +80,7 @@ export function Jellyform<
     (fields: PartialRecordOfFormValues<FormValues>) => {
       const newForm = { ...formValues, ...fields }
       setFormValues(newForm)
-      onFormChange(newForm)
+      if (onFormChange) onFormChange(newForm)
     },
     [formValues, onFormChange]
   )

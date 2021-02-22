@@ -15,16 +15,36 @@ npm install --save jellyform
 ```tsx
 import React, { Component } from 'react'
 
-import MyComponent from 'jellyform'
+import Jellyform from 'jellyform'
 import 'jellyform/dist/index.css'
 
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
+const App = () => {
+  return (
+    <Jellyform
+      fieldConfigs={{
+        name: {
+          Component: InputText,
+          staticProps: {
+            placeholder: 'Enter your name',
+            required: true
+          }
+        },
+        nickname: {
+          Component: InputText,
+          getError: (f) =>
+            f.nickname.charAt(0) !== f.name.charAt(0)
+              ? 'First letter of nickname must match name'
+              : null
+        }
+      }}
+      formValues={{ name: 'Timothy', nickname: 'Tim' }}
+      layout={[['name', 'nickname']]}
+      onFormSubmit={console.log}
+    />
+  )
 }
 ```
 
 ## License
 
-MIT © [roscioli](https://github.com/roscioli)
+MIT © [Octavio Roscioli](https://github.com/roscioli)

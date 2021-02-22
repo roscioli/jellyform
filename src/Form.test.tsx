@@ -2,7 +2,7 @@ import { fireEvent, render, wait } from '@testing-library/react'
 import React, { useEffect, useState } from 'react'
 import { perf } from 'react-performance-testing'
 import { InputText } from './components/InputText'
-import Form, { FieldConfigs, FormProps } from './Form'
+import Jellyform, { FieldConfigs, FormProps } from './Form'
 import {
   FakeForm,
   getFormInitialState,
@@ -32,7 +32,7 @@ const renderWithProps = (
   props: Partial<FormProps<FakeForm, {}, InputComponentProps>>
 ) =>
   render(
-    <Form<FakeForm, {}, InputComponentProps>
+    <Jellyform<FakeForm, {}, InputComponentProps>
       {...getFormProps()}
       {...getBaseFormProps()}
       {...props}
@@ -183,7 +183,9 @@ describe('submission', () => {
   })
 
   it('reenables button on submit complete', async () => {
-    const onFormSubmit = () => new Promise((resolve) => setTimeout(resolve, 1))
+    const onFormSubmit = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1))
+    }
     const { getByTestId } = renderWithProps({ onFormSubmit })
     fireEvent.click(getByTestId('submitButton'))
 
@@ -258,7 +260,7 @@ describe('input component props', () => {
     }
 
     const { getByLabelText } = render(
-      <Form<FakeForm2>
+      <Jellyform<FakeForm2>
         {...getBaseFormProps()}
         propGeneratorOptions={{}}
         formValues={{ input1: 'one' }}
@@ -279,7 +281,7 @@ describe('input component props', () => {
     }
 
     const { getByLabelText } = render(
-      <Form<FakeForm2>
+      <Jellyform<FakeForm2>
         {...getBaseFormProps()}
         propGeneratorOptions={{}}
         formValues={{ input1: 'one' }}
@@ -308,7 +310,7 @@ describe('input component props', () => {
       }, [])
 
       return (
-        <Form<FakeForm2, PropGeneratorOptions>
+        <Jellyform<FakeForm2, PropGeneratorOptions>
           {...getBaseFormProps()}
           propGeneratorOptions={{ label }}
           formValues={{ input1: 'one' }}
@@ -330,7 +332,7 @@ describe('performance', () => {
     formProps.fieldConfigs.num1.generateProps = jest.fn(
       formProps.fieldConfigs.num1.generateProps
     )
-    render(<Form<FakeForm, {}, InputComponentProps> {...formProps} />)
+    render(<Jellyform<FakeForm, {}, InputComponentProps> {...formProps} />)
     expect(formProps.fieldConfigs.num1.generateProps).toHaveBeenCalledTimes(1)
   })
 
