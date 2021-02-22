@@ -1,5 +1,6 @@
 import { fireEvent, render, wait } from '@testing-library/react'
 import React, { useEffect, useState } from 'react'
+import { perf } from 'react-performance-testing'
 import { InputText } from './components/InputText'
 import Form, { FieldConfigs, FormProps } from './Form'
 import {
@@ -331,6 +332,17 @@ describe('performance', () => {
     )
     render(<Form<FakeForm, {}, InputComponentProps> {...formProps} />)
     expect(formProps.fieldConfigs.num1.generateProps).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders minimally', async () => {
+    const { renderCount } = perf(React)
+    renderWithProps({})
+    await wait(() => {
+      if (Array.isArray(renderCount.current.Jellyform))
+        throw Error('Multiple Jellyforms')
+
+      expect(renderCount.current.Jellyform.value).toEqual(2)
+    })
   })
 })
 

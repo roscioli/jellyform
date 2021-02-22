@@ -95,12 +95,6 @@ export function Jellyform<
   const [disabledKeys, setDisabledKeys] = useState<Set<keyof FormValues>>(
     new Set()
   )
-  const [allProps, setAllProps] = useState<
-    PartialRecordOfFormValues<
-      FormValues,
-      StaticProps & Partial<PossibleComponentProps>
-    >
-  >({})
 
   const disabled = useMemo(
     () =>
@@ -116,11 +110,15 @@ export function Jellyform<
     > = {}
     const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
     const _disabledKeys: Set<keyof FormValues> = new Set()
+    const rowElements: JSX.Element[] = []
     let _isFormComplete = true
 
-    for (const row of layout)
+    for (let i = 0; i < layout.length; i++) {
+      const row = layout[i]
+      const fieldElements: JSX.Element[] = []
       for (const fieldKey of row) {
         const {
+          Component,
           generateProps,
           staticProps,
           getError,
@@ -142,43 +140,37 @@ export function Jellyform<
         if (props.disabled) _disabledKeys.add(fieldKey)
 
         if (props.required && !isValueDefined(value)) _isFormComplete = false
-      }
 
-    setIsFormComplete(_isFormComplete)
-    setErrors(_errors)
-    setAllProps(_allProps)
-    setDisabledKeys(_disabledKeys)
-  }, [formValues, fieldConfigs, setFormFields])
-
-  useEffect(() => {
-    if (!Object.keys(allProps).length) return
-    const els = layout.map((row, i) => (
-      <div key={`row-${i}`} className={getCssClassName('formRow')}>
-        {row.map((fieldKey: keyof FormValues) => {
-          const { Component } = fieldConfigs[fieldKey as string]
-
-          const props: GeneratedProps = {
-            'data-testid': `input-${fieldKey}`,
-            name: fieldKey,
-            value: formValues[fieldKey],
-            label: fieldKey,
-            form: formValues,
-            onChange: (val: FormValues[keyof FormValues]) => {
+        fieldElements.push(
+          <Component
+            key={fieldKey}
+            data-testid={`input-${fieldKey}`}
+            name={fieldKey}
+            value={formValues[fieldKey]}
+            label={fieldKey}
+            form={formValues}
+            onChange={(val: FormValues[keyof FormValues]) => {
               setFormFields({
                 [fieldKey]: val
               } as PartialRecordOfFormValues<FormValues>)
-            },
-            error: errors[fieldKey],
-            ...allProps[fieldKey]
-          }
+            }}
+            error={_errors[fieldKey]}
+            {...props}
+          />
+        )
+      }
+      rowElements.push(
+        <div key={`row-${i}`} className={getCssClassName('formRow')}>
+          {fieldElements}
+        </div>
+      )
+    }
 
-          return <Component key={fieldKey} {...props} />
-        })}
-      </div>
-    ))
-
-    setFormEls(els)
-  }, [layout, errors, setFormFields, formValues, allProps])
+    setIsFormComplete(_isFormComplete)
+    setErrors(_errors)
+    setDisabledKeys(_disabledKeys)
+    setFormEls(rowElements)
+  }, [formValues, fieldConfigs, setFormFields, layout])
 
   return (
     <div>

@@ -48,6 +48,7 @@
 .fieldBlock-errorText {
   margin-top: 4px;
   color: rgb(223, 86, 87);
+  font-size: 0.8em;
 }
 
 .fieldBlock-asterisk {
