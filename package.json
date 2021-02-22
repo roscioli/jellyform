@@ -1,6 +1,6 @@
 {
   "name": "jellyform",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Simple, declarative, lightweight React form",
   "author": "roscioli",
   "license": "MIT",
@@ -13,7 +13,7 @@
   },
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
-    "dev": "microbundle-crl --no-compress --format modern,cjs --watch",
+    "dev": "concurrently \"npm run build -- --watch\" \"cd example && npm start\"",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
@@ -40,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "babel-eslint": "^10.0.3",
+    "concurrently": "^6.0.0",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.7.0",
