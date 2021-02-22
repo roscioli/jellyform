@@ -15,7 +15,7 @@ const DISABLED_FORM_FIELD_CLASS =
 const ERROR_FORM_FIELD_CLASS =
   FORM_FIELD_CLASS + ' ' + getCssClassName('fieldBlock-error')
 
-export const getLabelText = (label: string, required?: boolean) => (
+const getLabelText = (label: string, required?: boolean) => (
   <Fragment>
     {label}
     {required ? (
