@@ -65,5 +65,12 @@
   ],
   "dependencies": {
     "react-select": "^4.1.0"
-  }
+  },
+  "keywords": [
+    "react",
+    "form",
+    "lightweight",
+    "declarative",
+    "typescript"
+  ]
 }
