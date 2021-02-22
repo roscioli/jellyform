@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { getCssClassName } from '../utils'
 
-export type FieldProps = {
+export type FieldBlockProps = {
   label: string
   name: string
   required: boolean | undefined
@@ -31,7 +31,7 @@ const getFieldBlockClassName = (error?: string, disabled?: boolean) =>
     ? DISABLED_FORM_FIELD_CLASS
     : FORM_FIELD_CLASS
 
-export const FieldBlock: React.FC<FieldProps> = ({
+export const FieldBlock: React.FC<FieldBlockProps> = ({
   label,
   children: inputElement,
   name,
@@ -50,8 +50,10 @@ export const FieldBlock: React.FC<FieldProps> = ({
   )
 }
 
-const wrapCustomInputComponent = (inputComponent: JSX.Element) => (props) => (
-  <FieldBlock {...props}>{inputComponent}</FieldBlock>
-)
+export function wrapCustomInputComponent<T extends FieldBlockProps>(
+  inputComponent: React.FC<T>
+) {
+  return (props: T) => <FieldBlock {...props}>{inputComponent}</FieldBlock>
+}
 
 export default FieldBlock
