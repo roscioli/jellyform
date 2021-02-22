@@ -12,7 +12,6 @@ import {
 import { getEmptyOption } from './utils'
 
 const originalError = console.error
-
 console.error = (s: string, ...args: any) => {
   if (
     typeof s === 'string' &&
@@ -20,6 +19,15 @@ console.error = (s: string, ...args: any) => {
     !s.match('act(...)')
   ) {
     originalError(s, ...args)
+  }
+}
+const originalWarn = console.warn
+console.warn = (s: string, ...args: any) => {
+  if (
+    typeof s === 'string' &&
+    !s.startsWith('[react-performance-testing] You have anonymous component.')
+  ) {
+    originalWarn(s, ...args)
   }
 }
 
