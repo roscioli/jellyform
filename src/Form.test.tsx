@@ -23,7 +23,7 @@ console.error = (s: string, ...args: any) => {
   }
 }
 
-export const getBaseFormProps = () => ({
+const getBaseFormProps = () => ({
   onFormSubmit: jest.fn(),
   onFormChange: jest.fn()
 })
