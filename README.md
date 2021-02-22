@@ -85,7 +85,7 @@ This defines the submit button text.
 
 ### `Component` (React Component)
 
-This prop is your React input component for this field.
+This is the React input component for this field.
 
 ### `staticProps` (`object`)
 
@@ -105,11 +105,11 @@ setFormValues({b: 1, c: 2})
 // now formValues is {a: 0, b: 1, c: 2}
 ```
 
-### `getError`
+### `getError` (`Function`)
 
 This is a function that takes the `formValues` as a parameter. It should return a error string if the field has an error and `null` if it does not.
 
-### `getActualValue`
+### `getActualValue` (`Function`)
 
 Jellyform toggles the disabled state of the form's submit button based on the existence of the value and if the value has an error or not. Jellyform, by default, uses an identity function `x => x` to get the value of the form's field to check if it is unpopulated or erroneous.
 
