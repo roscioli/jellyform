@@ -20,7 +20,7 @@ type FieldConfig<FormValues, PropGeneratorOptions, PossibleComponentProps> = {
   generateProps?: (
     options: PropGeneratorOptions & {
       formValues: FormValues
-      setFormFields: (fields: PartialRecordOfFormValues<FormValues>) => void
+      setFormValues: (fields: PartialRecordOfFormValues<FormValues>) => void
     }
   ) => StaticProps & Partial<PossibleComponentProps>
   getError?: (form: FormValues) => string | null
@@ -74,12 +74,12 @@ export function Jellyform<
   onFormSubmit,
   submitButtonText
 }: FormProps<FormValues, PropGeneratorOptions, PossibleComponentProps>) {
-  const [formValues, setFormValues] = useState(_formValues)
+  const [formValues, setAllFormValues] = useState(_formValues)
 
-  const setFormFields = useCallback(
+  const setFormValues = useCallback(
     (fields: PartialRecordOfFormValues<FormValues>) => {
       const newForm = { ...formValues, ...fields }
-      setFormValues(newForm)
+      setAllFormValues(newForm)
       if (onFormChange) onFormChange(newForm)
     },
     [formValues, onFormChange]
@@ -106,7 +106,7 @@ export function Jellyform<
       FormValues,
       StaticProps & Partial<PossibleComponentProps>
     > = {}
-    const propGeneratorOptions = { ..._propGenOpts, formValues, setFormFields }
+    const propGeneratorOptions = { ..._propGenOpts, formValues, setFormValues }
     const _disabledKeys: Set<keyof FormValues> = new Set()
     const rowElements: JSX.Element[] = []
     let _isFormComplete = true
@@ -148,7 +148,7 @@ export function Jellyform<
             label={fieldKey}
             form={formValues}
             onChange={(val: FormValues[keyof FormValues]) => {
-              setFormFields({
+              setFormValues({
                 [fieldKey]: val
               } as PartialRecordOfFormValues<FormValues>)
             }}
@@ -168,7 +168,7 @@ export function Jellyform<
     setErrors(_errors)
     setDisabledKeys(_disabledKeys)
     setFormEls(rowElements)
-  }, [formValues, fieldConfigs, setFormFields, layout])
+  }, [formValues, fieldConfigs, setFormValues, layout])
 
   return (
     <div>
