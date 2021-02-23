@@ -91,7 +91,7 @@ This is a function that will get executed on form submit. It may be async or syn
 
 `object`
 
-When generating props for a field using [`generateProps`](#generateprops-function), you may need dynamic values from your app to be passed into the form to generate the correct props. An example of this is creating dynamic options asynchronously for a select component.
+When generating props for a field using [`generateProps`](#generateprops), you may need dynamic values from your app to be passed into the form to generate the correct props. An example of this is creating dynamic options asynchronously for a select component.
 
 To pass in application state into the form dynamically, you can define the `propGeneratorOptions` object so your field configs can access this state to generate input field props in the `generateProps` function.
 
@@ -139,7 +139,7 @@ These are static props that will always get passed into `Component`.
 
 `Function`
 
-This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formvalues-object), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propgeneratoroptions-object).
+This function dynamically creates props that get passed into `Component`. The function has one parameter object which keys include [`formValues`](#formvalues), `setFormValues`, and any key/value pair in [`propGeneratorOptions`](#propgeneratoroptions).
 
 Sometimes an update to one field can trigger an update on another field. `setFormValues` is a function that takes an object to override the current `formValues`.
 
@@ -204,7 +204,7 @@ This is a simple object type defining the key/values of your form.
 
 ### PropGeneratorOptions
 
-This is another simple object tpe defining the key/values of the object, [`propGeneratorOptions`](#propgeneratoroptions-object), that is passed into `generateProps`.
+This is another simple object tpe defining the key/values of the object, [`propGeneratorOptions`](#propgeneratoroptions), that is passed into `generateProps`.
 
 ### PossibleComponentProps
 
