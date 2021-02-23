@@ -4,7 +4,7 @@ import { getCssClassName } from '../utils'
 export type SubmitButtonBaseProps = {
   disabled: boolean
   onClick: () => Promise<void>
-  children?: string
+  submitButtonText?: string
 }
 
 type SubmitButtonProps = SubmitButtonBaseProps & {
@@ -16,16 +16,22 @@ const SubmitButtonDefault = (props: SubmitButtonBaseProps) => (
     data-testid='submitButton'
     className={getCssClassName('submitButton')}
     {...props}
-  />
+  >
+    {props.submitButtonText}
+  </button>
 )
 
 const SubmitButton = ({
   onClick,
   disabled,
-  children = 'Submit',
+  submitButtonText = 'Submit',
   Component = SubmitButtonDefault
 }: SubmitButtonProps) => (
-  <Component disabled={disabled} onClick={onClick} children={children} />
+  <Component
+    disabled={disabled}
+    onClick={onClick}
+    submitButtonText={submitButtonText}
+  />
 )
 
 export default SubmitButton

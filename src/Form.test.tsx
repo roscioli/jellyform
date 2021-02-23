@@ -262,13 +262,16 @@ describe('rendering', () => {
   it('renders submit button with overriding button component', () => {
     const SubmitButtonOverride = (props: {
       disabled: boolean
-      onClick: () => Promise<void>
-      children?: string
-    }) => <span data-testid='submitButton-override' {...props} />
+      onClick: () => void
+    }) => (
+      <span data-testid='submitButton-override' {...props}>
+        Save
+      </span>
+    )
     const { getByTestId } = renderWithProps({
       components: { SubmitButton: SubmitButtonOverride }
     })
-    expect(getByTestId('submitButton-override').innerHTML).toEqual('Submit')
+    expect(getByTestId('submitButton-override').innerHTML).toEqual('Save')
   })
 })
 

@@ -107,6 +107,16 @@ This is a function that executes every time a form value is changed. The functio
 
 This defines the submit button text.
 
+### components
+
+`object`
+
+You can override components by passing in the overrides in the `components` object. Currently you can only override `SubmitButton`.
+
+|Override |Prop types|
+|-|-|
+|`SubmitButton`| `{disabled: boolean, onClick: () => void}` |
+
 ***
 
 ## FieldConfig

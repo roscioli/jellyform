@@ -189,7 +189,7 @@ export function Jellyform<
       <SubmitButton
         disabled={disabled}
         onClick={onSubmitButtonClick}
-        children={submitButtonText}
+        submitButtonText={submitButtonText}
         Component={components.SubmitButton}
       />
     </form>
