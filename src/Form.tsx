@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import SubmitButton, { SubmitButtonBaseProps } from './components/SubmitButton'
 import { getCssClassName } from './utils'
 
 type StringKeyObject = { [key: string]: any }
@@ -52,6 +53,7 @@ export type FormProps<
   propGeneratorOptions?: PropGeneratorOptions
   onFormChange?: (state: FormValues) => void
   submitButtonText?: string
+  components?: { SubmitButton?: React.FC<SubmitButtonBaseProps> }
 }
 
 const isValueDefined = (val: any) => {
@@ -72,7 +74,8 @@ export function Jellyform<
   fieldConfigs,
   layout,
   onFormSubmit,
-  submitButtonText
+  submitButtonText,
+  components = {}
 }: FormProps<FormValues, PropGeneratorOptions, PossibleComponentProps>) {
   const [formValues, setAllFormValues] = useState(_formValues)
 
@@ -170,26 +173,26 @@ export function Jellyform<
     setFormEls(rowElements)
   }, [formValues, fieldConfigs, setFormValues, layout])
 
+  const onSubmitButtonClick = useCallback(async () => {
+    setIsSubmitting(true)
+    const formWithoutDisabledKeys = Object.entries(formValues).reduce(
+      (acc, [k, v]) => (disabledKeys.has(k) ? acc : { ...acc, [k]: v }),
+      {}
+    )
+    await onFormSubmit(formWithoutDisabledKeys)
+    setIsSubmitting(false)
+  }, [setIsSubmitting, formValues, disabledKeys, onFormSubmit])
+
   return (
-    <div>
+    <form>
       <div>{formEls}</div>
-      <button
-        data-testid='submitButton'
-        className={getCssClassName('submitButton')}
+      <SubmitButton
         disabled={disabled}
-        onClick={async () => {
-          setIsSubmitting(true)
-          const formWithoutDisabledKeys = Object.entries(formValues).reduce(
-            (acc, [k, v]) => (disabledKeys.has(k) ? acc : { ...acc, [k]: v }),
-            {}
-          )
-          await onFormSubmit(formWithoutDisabledKeys)
-          setIsSubmitting(false)
-        }}
-      >
-        {submitButtonText || 'Submit'}
-      </button>
-    </div>
+        onClick={onSubmitButtonClick}
+        children={submitButtonText}
+        Component={components.SubmitButton}
+      />
+    </form>
   )
 }
 
