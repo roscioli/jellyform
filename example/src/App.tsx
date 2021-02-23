@@ -7,7 +7,12 @@ const App = () => {
   const initialProps = useMemo(() => __fixture.getFormProps(), [])
 
   return (
-    <div style={{width: '800px', margin: '100px auto'}}>
+    <div style={{
+      width: '80%',
+      margin: '100px auto',
+      minWidth: 400,
+      maxWidth: 800
+    }}>
       <Jellyform<__FakeForm, {}, __InputComponentProps>
       {...initialProps}
       onFormSubmit={(f) => {
